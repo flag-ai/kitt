@@ -10,6 +10,7 @@ import (
 
 	"github.com/flag-ai/kitt/internal/api/handlers"
 	"github.com/flag-ai/kitt/internal/api/middleware"
+	"github.com/flag-ai/kitt/internal/campaign"
 	"github.com/flag-ai/kitt/internal/engines"
 	"github.com/flag-ai/kitt/internal/service"
 )
@@ -42,6 +43,13 @@ type RouterConfig struct {
 	// BenchmarkService backs /benchmarks CRUD. May be nil during
 	// early bring-up.
 	BenchmarkService service.BenchmarkRegistryServicer
+
+	// CampaignService, CampaignRunner, and CampaignState power the
+	// /campaigns routes. All three must be non-nil for the routes to
+	// be registered.
+	CampaignService service.CampaignServicer
+	CampaignRunner  handlers.CampaignRunner
+	CampaignState   *campaign.State
 }
 
 // NewRouter builds a chi.Mux with the KITT scaffold routes registered.
@@ -96,6 +104,19 @@ func NewRouter(cfg *RouterConfig) *chi.Mux {
 			r.Get("/benchmarks/{id}", benchH.Get)
 			r.Put("/benchmarks/{id}", benchH.Update)
 			r.Delete("/benchmarks/{id}", benchH.Delete)
+		}
+
+		// Campaigns.
+		if cfg.CampaignService != nil && cfg.CampaignRunner != nil && cfg.CampaignState != nil {
+			campH := handlers.NewCampaignHandler(cfg.CampaignService, cfg.CampaignRunner, cfg.CampaignState, cfg.Logger)
+			r.Get("/campaigns", campH.List)
+			r.Post("/campaigns", campH.Create)
+			r.Get("/campaigns/{id}", campH.Get)
+			r.Delete("/campaigns/{id}", campH.Delete)
+			r.Post("/campaigns/{id}/run", campH.RunNow)
+			r.Get("/campaigns/{id}/schedule", campH.GetSchedule)
+			r.Put("/campaigns/{id}/schedule", campH.UpdateSchedule)
+			r.Get("/campaigns/{id}/status", campH.Status)
 		}
 	})
 

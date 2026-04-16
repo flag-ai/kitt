@@ -26,6 +26,7 @@ import (
 
 	"github.com/flag-ai/kitt/internal/api"
 	"github.com/flag-ai/kitt/internal/bonnie"
+	"github.com/flag-ai/kitt/internal/campaign"
 	"github.com/flag-ai/kitt/internal/config"
 	"github.com/flag-ai/kitt/internal/db"
 	"github.com/flag-ai/kitt/internal/db/sqlc"
@@ -135,6 +136,24 @@ func serve() error {
 	engineProfileSvc := service.NewEngineProfileService(queries, engines.Default, logger)
 	benchmarkSvc := service.NewBenchmarkRegistryService(queries, logger)
 
+	// Campaign control plane: state is shared between the runner
+	// (producer) and the /campaigns/{id}/status SSE endpoint (consumer).
+	campaignState := campaign.NewState()
+	campaignRunner := campaign.NewRunner(registry, campaignState, logger)
+	// Two-phase wiring: service needs the scheduler (for reload on
+	// mutations), scheduler needs the service (to fetch campaigns).
+	// We construct the service with a nil reloader, build the
+	// scheduler with the service as fetcher, then hand the scheduler
+	// back to the service via a setter. This avoids an initialization
+	// cycle without giving either side a god-reference.
+	campaignSvc := service.NewCampaignService(queries, nil, logger)
+	campaignScheduler := campaign.NewScheduler(campaignSvc, campaignRunner, logger)
+	campaignSvc.SetScheduler(campaignScheduler)
+	if err := campaignScheduler.Start(ctx); err != nil {
+		return fmt.Errorf("campaign scheduler start: %w", err)
+	}
+	defer campaignScheduler.Stop()
+
 	// Health registry — database check is mandatory. Devon reachability
 	// is registered in PR F when the recommender consumes it.
 	healthRegistry := health.NewRegistry()
@@ -150,6 +169,9 @@ func serve() error {
 		EngineRegistry:       engines.Default,
 		EngineProfileService: engineProfileSvc,
 		BenchmarkService:     benchmarkSvc,
+		CampaignService:      campaignSvc,
+		CampaignRunner:       campaignRunner,
+		CampaignState:        campaignState,
 	})
 
 	srv := &http.Server{
