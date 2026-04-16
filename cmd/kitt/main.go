@@ -133,6 +133,7 @@ func serve() error {
 	// Domain services.
 	agentSvc := service.NewAgentService(queries, registry, logger)
 	engineProfileSvc := service.NewEngineProfileService(queries, engines.Default, logger)
+	benchmarkSvc := service.NewBenchmarkRegistryService(queries, logger)
 
 	// Health registry — database check is mandatory. Devon reachability
 	// is registered in PR F when the recommender consumes it.
@@ -148,6 +149,7 @@ func serve() error {
 		AgentService:         agentSvc,
 		EngineRegistry:       engines.Default,
 		EngineProfileService: engineProfileSvc,
+		BenchmarkService:     benchmarkSvc,
 	})
 
 	srv := &http.Server{
