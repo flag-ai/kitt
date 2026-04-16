@@ -10,6 +10,7 @@ import (
 
 	"github.com/flag-ai/kitt/internal/api/handlers"
 	"github.com/flag-ai/kitt/internal/api/middleware"
+	"github.com/flag-ai/kitt/internal/engines"
 	"github.com/flag-ai/kitt/internal/service"
 )
 
@@ -30,6 +31,13 @@ type RouterConfig struct {
 	// AgentService handles BONNIE agent CRUD. May be nil in early
 	// bring-up; the agent routes are only registered when non-nil.
 	AgentService service.AgentServicer
+
+	// EngineRegistry is the compile-in engine plugin registry. When
+	// nil the engine enumeration route returns an empty list.
+	EngineRegistry *engines.Registry
+
+	// EngineProfileService backs the /engines/profiles CRUD routes.
+	EngineProfileService service.EngineProfileServicer
 }
 
 // NewRouter builds a chi.Mux with the KITT scaffold routes registered.
@@ -66,6 +74,15 @@ func NewRouter(cfg *RouterConfig) *chi.Mux {
 			r.Get("/bonnie-agents/{id}", agentH.Get)
 			r.Delete("/bonnie-agents/{id}", agentH.Delete)
 		}
+
+		// Engine registry + engine profiles.
+		engineH := handlers.NewEngineHandler(cfg.EngineRegistry, cfg.EngineProfileService, cfg.Logger)
+		r.Get("/engines", engineH.ListEngines)
+		r.Get("/engines/profiles", engineH.ListProfiles)
+		r.Post("/engines/profiles", engineH.CreateProfile)
+		r.Get("/engines/profiles/{id}", engineH.GetProfile)
+		r.Put("/engines/profiles/{id}", engineH.UpdateProfile)
+		r.Delete("/engines/profiles/{id}", engineH.DeleteProfile)
 	})
 
 	return r

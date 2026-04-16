@@ -29,7 +29,16 @@ import (
 	"github.com/flag-ai/kitt/internal/config"
 	"github.com/flag-ai/kitt/internal/db"
 	"github.com/flag-ai/kitt/internal/db/sqlc"
+	"github.com/flag-ai/kitt/internal/engines"
 	"github.com/flag-ai/kitt/internal/service"
+
+	// Side-effect imports — each engine package registers itself with
+	// engines.Default on init().
+	_ "github.com/flag-ai/kitt/internal/engines/exllamav2"
+	_ "github.com/flag-ai/kitt/internal/engines/llamacpp"
+	_ "github.com/flag-ai/kitt/internal/engines/mlx"
+	_ "github.com/flag-ai/kitt/internal/engines/ollama"
+	_ "github.com/flag-ai/kitt/internal/engines/vllm"
 )
 
 func main() {
@@ -123,6 +132,7 @@ func serve() error {
 
 	// Domain services.
 	agentSvc := service.NewAgentService(queries, registry, logger)
+	engineProfileSvc := service.NewEngineProfileService(queries, engines.Default, logger)
 
 	// Health registry — database check is mandatory. Devon reachability
 	// is registered in PR F when the recommender consumes it.
@@ -131,11 +141,13 @@ func serve() error {
 
 	// Build router.
 	router := api.NewRouter(&api.RouterConfig{
-		Logger:         logger,
-		HealthRegistry: healthRegistry,
-		AdminToken:     cfg.AdminToken,
-		CORSOrigins:    cfg.CORSOrigins,
-		AgentService:   agentSvc,
+		Logger:               logger,
+		HealthRegistry:       healthRegistry,
+		AdminToken:           cfg.AdminToken,
+		CORSOrigins:          cfg.CORSOrigins,
+		AgentService:         agentSvc,
+		EngineRegistry:       engines.Default,
+		EngineProfileService: engineProfileSvc,
 	})
 
 	srv := &http.Server{
