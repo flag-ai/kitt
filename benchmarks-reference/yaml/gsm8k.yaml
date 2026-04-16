@@ -1,0 +1,49 @@
+# GSM8K — Grade School Math
+#
+# Declarative YAML benchmark spec interpreted by kitt-yaml-runner.
+# Chain-of-thought arithmetic word problems; grading extracts the
+# final numeric answer after the ``#### `` delimiter produced by the
+# canonical prompt format.
+name: gsm8k
+kind: yaml
+category: quality
+description: >-
+  Grade-school arithmetic word problems. Chain-of-thought prompting,
+  scored by exact-match on the final numeric answer (extracted via a
+  regex after the "#### " marker that GSM8K answers use).
+
+dataset:
+  source: huggingface
+  id: openai/gsm8k
+  subset: main
+  split: test
+  sample_size: 300
+  shuffle_seed: 42
+
+prompt:
+  fewshot:
+    source: split
+    split: train
+    count: 8
+  template: |
+    {fewshot}
+
+    Question: {question}
+    Answer:
+
+sampling:
+  temperature: 0.0
+  top_p: 1.0
+  max_tokens: 256
+  stop: ["\nQuestion:"]
+
+parse:
+  method: regex
+  # Canonical GSM8K answers are delimited by "#### <number>" — few-shot
+  # exemplars teach the model to produce the same marker. We accept
+  # commas and decimals and strip $ signs.
+  pattern: "####\\s*\\$?([\\-0-9,.]+)"
+  normalize: number
+
+score:
+  method: exact-match

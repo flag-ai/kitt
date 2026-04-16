@@ -1,0 +1,59 @@
+# Prompt robustness — consistency across paraphrases
+#
+# Uses a small inline dataset of factual questions rendered through
+# several paraphrase templates. A response is counted correct if the
+# normalized answer contains the ground truth. The aggregate score is
+# the pass rate across all (question × template) pairs — so a model
+# that answers correctly under one phrasing but not another scores
+# lower than one that is template-invariant.
+name: prompt-robustness
+kind: yaml
+category: robustness
+description: >-
+  Measures stability of answers across paraphrased prompts for the
+  same underlying question. Score is pass-rate across the full
+  (question × template) grid; a template-invariant model scores 1.0.
+
+dataset:
+  source: inline
+  items:
+    - question: "What is the capital of France?"
+      answer: "Paris"
+    - question: "Who wrote Romeo and Juliet?"
+      answer: "Shakespeare"
+    - question: "What is the chemical symbol for gold?"
+      answer: "Au"
+    - question: "Which planet is known as the Red Planet?"
+      answer: "Mars"
+    - question: "How many continents are there?"
+      answer: "7"
+    - question: "What is the largest ocean on Earth?"
+      answer: "Pacific"
+    - question: "In what year did World War II end?"
+      answer: "1945"
+    - question: "What is the speed of light in m/s (to three sig figs)?"
+      answer: "3.00e8"
+
+prompt:
+  # Each item is evaluated under every template below; the score is
+  # the pass rate across the (items × templates) matrix.
+  templates:
+    - "Answer concisely. {question}"
+    - "Q: {question}\nA:"
+    - "You are a helpful assistant. Please answer: {question}"
+    - "Respond with a single short answer. Question: {question}"
+    - "{question} Give only the answer, no explanation."
+
+sampling:
+  temperature: 0.0
+  top_p: 1.0
+  max_tokens: 16
+  stop: ["\n", "Q:"]
+
+parse:
+  method: contains
+  case_sensitive: false
+  normalize: whitespace
+
+score:
+  method: pass-rate
