@@ -25,8 +25,11 @@ import (
 	"github.com/flag-ai/commons/version"
 
 	"github.com/flag-ai/kitt/internal/api"
+	"github.com/flag-ai/kitt/internal/bonnie"
 	"github.com/flag-ai/kitt/internal/config"
 	"github.com/flag-ai/kitt/internal/db"
+	"github.com/flag-ai/kitt/internal/db/sqlc"
+	"github.com/flag-ai/kitt/internal/service"
 )
 
 func main() {
@@ -109,9 +112,20 @@ func serve() error {
 		return err
 	}
 
-	// Health registry — database check is mandatory. Additional checks
-	// (BONNIE registry, Devon reachability) will be registered by later
-	// PRs once those services are wired up.
+	// sqlc queries.
+	queries := sqlc.New(pool)
+
+	// BONNIE agent registry — shared flag-commons implementation
+	// backed by the kitt_bonnie_agents table.
+	store := service.NewBonnieRegistryStore(queries)
+	registry := bonnie.NewRegistry(store, logger)
+	registry.Start(ctx)
+
+	// Domain services.
+	agentSvc := service.NewAgentService(queries, registry, logger)
+
+	// Health registry — database check is mandatory. Devon reachability
+	// is registered in PR F when the recommender consumes it.
 	healthRegistry := health.NewRegistry()
 	healthRegistry.Register(health.NewDatabaseChecker(pool))
 
@@ -121,6 +135,7 @@ func serve() error {
 		HealthRegistry: healthRegistry,
 		AdminToken:     cfg.AdminToken,
 		CORSOrigins:    cfg.CORSOrigins,
+		AgentService:   agentSvc,
 	})
 
 	srv := &http.Server{
