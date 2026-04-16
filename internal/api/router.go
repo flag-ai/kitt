@@ -13,6 +13,7 @@ import (
 	"github.com/flag-ai/kitt/internal/campaign"
 	"github.com/flag-ai/kitt/internal/engines"
 	"github.com/flag-ai/kitt/internal/notifications"
+	"github.com/flag-ai/kitt/internal/recommendation"
 	"github.com/flag-ai/kitt/internal/service"
 	"github.com/flag-ai/kitt/internal/storage"
 )
@@ -58,6 +59,9 @@ type RouterConfig struct {
 
 	// Notifier backs /notifications/test.
 	Notifier *notifications.Notifier
+
+	// Recommender backs /recommend. May be nil to omit the route.
+	Recommender *recommendation.Recommender
 }
 
 // NewRouter builds a chi.Mux with the KITT scaffold routes registered.
@@ -140,6 +144,13 @@ func NewRouter(cfg *RouterConfig) *chi.Mux {
 		if cfg.Notifier != nil {
 			notifH := handlers.NewNotificationHandler(cfg.Notifier, cfg.Logger)
 			r.Post("/notifications/test", notifH.Test)
+		}
+
+		// Recommendations.
+		if cfg.Recommender != nil {
+			recH := handlers.NewRecommendationHandler(cfg.Recommender, cfg.Logger)
+			r.Get("/recommend", recH.Recommend)
+			r.Post("/recommend", recH.Recommend)
 		}
 	})
 
