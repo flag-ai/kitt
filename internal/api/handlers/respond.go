@@ -9,8 +9,6 @@ import (
 )
 
 // errorResponse is the standard error envelope returned by KITT.
-//
-//nolint:unused // used by handlers introduced in PR B onwards.
 type errorResponse struct {
 	Error string `json:"error"`
 }
@@ -23,15 +21,11 @@ func writeJSON(w http.ResponseWriter, status int, v any) {
 }
 
 // writeError writes a JSON error response.
-//
-//nolint:unused // used by handlers introduced in PR B onwards.
 func writeError(w http.ResponseWriter, status int, msg string) {
 	writeJSON(w, status, errorResponse{Error: msg})
 }
 
 // parseUUID extracts and parses the "id" URL parameter.
-//
-//nolint:unused // used by handlers introduced in PR B onwards.
 func parseUUID(r *http.Request) (uuid.UUID, error) {
 	raw := chi.URLParam(r, "id")
 	return uuid.Parse(raw)
@@ -39,13 +33,9 @@ func parseUUID(r *http.Request) (uuid.UUID, error) {
 
 // maxBodySize is the maximum allowed request body size (1 MiB). Larger
 // payloads are rejected to prevent memory exhaustion.
-//
-//nolint:unused // used by handlers introduced in PR B onwards.
 const maxBodySize = 1 << 20
 
 // decodeBody decodes the JSON request body into dst.
-//
-//nolint:unused // used by handlers introduced in PR B onwards.
 func decodeBody(w http.ResponseWriter, r *http.Request, dst any) error {
 	r.Body = http.MaxBytesReader(w, r.Body, maxBodySize)
 	defer func() { _ = r.Body.Close() }()
