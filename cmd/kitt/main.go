@@ -32,6 +32,7 @@ import (
 	"github.com/flag-ai/kitt/internal/db/sqlc"
 	"github.com/flag-ai/kitt/internal/engines"
 	"github.com/flag-ai/kitt/internal/notifications"
+	"github.com/flag-ai/kitt/internal/recommendation"
 	"github.com/flag-ai/kitt/internal/service"
 	"github.com/flag-ai/kitt/internal/storage"
 
@@ -138,6 +139,7 @@ func serve() error {
 	engineProfileSvc := service.NewEngineProfileService(queries, engines.Default, logger)
 	benchmarkSvc := service.NewBenchmarkRegistryService(queries, logger)
 	runStore := storage.New(queries)
+	recommender := recommendation.NewRecommender(engines.Default)
 
 	// Notifier fans campaign/benchmark lifecycle events out to the
 	// configured chat channels.
@@ -198,6 +200,7 @@ func serve() error {
 		CampaignState:        campaignState,
 		Storage:              runStore,
 		Notifier:             notifier,
+		Recommender:          recommender,
 	})
 
 	srv := &http.Server{
