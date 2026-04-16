@@ -1,4 +1,4 @@
-# Go
+# Go build artifacts
 /kitt
 *.exe
 *.test
@@ -16,11 +16,21 @@ coverage.*
 .DS_Store
 Thumbs.db
 
-# KITT specific
+# KITT local runtime
 .kitt/
 .claude/
 .env
 
-# Web (PR I onward)
+# Web
 web/node_modules/
 web/dist/
+
+# Benchmark smoke-test scratch
+/tmp-smoke-benchmarks/
+benchmarks-reference/tools/__pycache__/
+benchmarks-reference/**/__pycache__/
+
+# Python virtualenvs used by smoke harness — accidentally created
+# locally should never be committed.
+.venv/
+venv/
