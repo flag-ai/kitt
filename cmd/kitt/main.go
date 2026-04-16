@@ -31,6 +31,7 @@ import (
 	"github.com/flag-ai/kitt/internal/db"
 	"github.com/flag-ai/kitt/internal/db/sqlc"
 	"github.com/flag-ai/kitt/internal/engines"
+	"github.com/flag-ai/kitt/internal/notifications"
 	"github.com/flag-ai/kitt/internal/service"
 	"github.com/flag-ai/kitt/internal/storage"
 
@@ -138,10 +139,21 @@ func serve() error {
 	benchmarkSvc := service.NewBenchmarkRegistryService(queries, logger)
 	runStore := storage.New(queries)
 
+	// Notifier fans campaign/benchmark lifecycle events out to the
+	// configured chat channels.
+	var notifChannels []notifications.Channel
+	if cfg.SlackWebhook != "" {
+		notifChannels = append(notifChannels, notifications.NewSlackChannel(cfg.SlackWebhook, nil))
+	}
+	if cfg.DiscordWebhook != "" {
+		notifChannels = append(notifChannels, notifications.NewDiscordChannel(cfg.DiscordWebhook, nil))
+	}
+	notifier := notifications.NewNotifier(logger, notifChannels...)
+
 	// Campaign control plane: state is shared between the runner
 	// (producer) and the /campaigns/{id}/status SSE endpoint (consumer).
 	campaignState := campaign.NewState()
-	campaignRunner := campaign.NewRunner(registry, campaignState, logger)
+	campaignRunner := campaign.NewRunner(registry, campaignState, notifier, logger)
 	// Two-phase wiring: service needs the scheduler (for reload on
 	// mutations), scheduler needs the service (to fetch campaigns).
 	// We construct the service with a nil reloader, build the
@@ -175,6 +187,7 @@ func serve() error {
 		CampaignRunner:       campaignRunner,
 		CampaignState:        campaignState,
 		Storage:              runStore,
+		Notifier:             notifier,
 	})
 
 	srv := &http.Server{

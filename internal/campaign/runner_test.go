@@ -16,7 +16,7 @@ func quietLogger() *slog.Logger {
 }
 
 func TestRunner_RunRejectsEmptyConfig(t *testing.T) {
-	r := NewRunner(nil, NewState(), quietLogger())
+	r := NewRunner(nil, NewState(), nil, quietLogger())
 	c := &models.Campaign{
 		ID: uuid.New(),
 		Config: models.CampaignConfig{
@@ -31,7 +31,7 @@ func TestRunner_RunRejectsEmptyConfig(t *testing.T) {
 }
 
 func TestRunner_RunNoAgentsFails(t *testing.T) {
-	r := NewRunner(nil, NewState(), quietLogger())
+	r := NewRunner(nil, NewState(), nil, quietLogger())
 	c := &models.Campaign{
 		ID:   uuid.New(),
 		Name: "t",
