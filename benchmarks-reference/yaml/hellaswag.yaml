@@ -1,0 +1,50 @@
+# HellaSwag — Commonsense inference (sentence completion)
+#
+# Four candidate endings per context; the model picks the most
+# plausible continuation. Evaluated via letter-choice scoring on the
+# generated A/B/C/D response.
+name: hellaswag
+kind: yaml
+category: quality
+description: >-
+  Sentence completion with commonsense inference. Given a context and
+  four candidate endings, the model picks the most plausible
+  continuation (A/B/C/D).
+
+dataset:
+  source: huggingface
+  id: Rowan/hellaswag
+  split: validation
+  sample_size: 500
+  shuffle_seed: 42
+
+prompt:
+  fewshot:
+    source: split
+    split: train
+    count: 5
+  template: |
+    Choose the most plausible ending (A/B/C/D).
+
+    {fewshot}
+
+    {context}
+    A. {ending_a}
+    B. {ending_b}
+    C. {ending_c}
+    D. {ending_d}
+    Answer:
+
+sampling:
+  temperature: 0.0
+  top_p: 1.0
+  max_tokens: 4
+  stop: ["\n"]
+
+parse:
+  method: letter-choice
+  choices: [A, B, C, D]
+  strict: false
+
+score:
+  method: accuracy
