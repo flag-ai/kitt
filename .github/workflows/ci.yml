@@ -120,3 +120,20 @@ jobs:
         run: npm run typecheck
       - name: Build
         run: npm run build
+
+  smoke-benchmarks:
+    name: Benchmark Smoke
+    runs-on: ubuntu-latest
+    # Only runs when benchmark sources change. The matrix publish
+    # workflow covers real image builds on release tags; this job is
+    # the fast "does every entrypoint run and produce valid JSON?"
+    # gate against a stdlib mock engine.
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install smoke-test deps
+        run: pip install httpx==0.27.2 pyyaml==6.0.2 jsonschema==4.23.0
+      - name: Run smoke test
+        run: python3 benchmarks-reference/tools/smoke_test.py
