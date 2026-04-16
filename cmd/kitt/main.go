@@ -10,6 +10,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"io/fs"
 	"log/slog"
 	"net"
 	"net/http"
@@ -35,6 +36,7 @@ import (
 	"github.com/flag-ai/kitt/internal/recommendation"
 	"github.com/flag-ai/kitt/internal/service"
 	"github.com/flag-ai/kitt/internal/storage"
+	"github.com/flag-ai/kitt/web"
 
 	// Side-effect imports — each engine package registers itself with
 	// engines.Default on init().
@@ -201,6 +203,7 @@ func serve() error {
 		Storage:              runStore,
 		Notifier:             notifier,
 		Recommender:          recommender,
+		SPAFS:                spaFS(),
 	})
 
 	srv := &http.Server{
@@ -243,6 +246,25 @@ func serve() error {
 
 	logger.Info("kitt stopped")
 	return nil
+}
+
+// spaFS returns the embedded SPA filesystem rooted at dist/, or nil
+// when the build did not include compiled assets (npm run build
+// failed or was skipped). Running without a SPA is valid for
+// API-only deployments.
+func spaFS() fs.FS {
+	sub, err := fs.Sub(web.Dist, "dist")
+	if err != nil {
+		return nil
+	}
+	// Probe index.html — if it's missing, skip the fallback so the
+	// server returns clean 404s instead of an empty-body SPA shell.
+	f, err := sub.Open("index.html")
+	if err != nil {
+		return nil
+	}
+	_ = f.Close()
+	return sub
 }
 
 // migrationsSourcePath resolves the migrations directory — preferring

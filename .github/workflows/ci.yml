@@ -15,6 +15,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Build frontend (required for go:embed)
+        run: cd web && npm ci && npm run build
       - uses: actions/setup-go@v5
         with:
           go-version: "1.25"
@@ -27,6 +32,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Build frontend (required for go:embed)
+        run: cd web && npm ci && npm run build
       - uses: actions/setup-go@v5
         with:
           go-version: "1.25"
@@ -78,6 +88,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Build frontend (required for go:embed)
+        run: cd web && npm ci && npm run build
       - uses: actions/setup-go@v5
         with:
           go-version: "1.25"
@@ -85,3 +100,23 @@ jobs:
         run: go install github.com/securego/gosec/v2/cmd/gosec@latest
       - name: Run gosec
         run: gosec ./...
+
+  web:
+    name: Web
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install dependencies
+        run: npm ci
+      - name: Lint
+        run: npm run lint
+      - name: Type check
+        run: npm run typecheck
+      - name: Build
+        run: npm run build
