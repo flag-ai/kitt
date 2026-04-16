@@ -13,6 +13,7 @@ import (
 	"github.com/flag-ai/kitt/internal/campaign"
 	"github.com/flag-ai/kitt/internal/engines"
 	"github.com/flag-ai/kitt/internal/service"
+	"github.com/flag-ai/kitt/internal/storage"
 )
 
 // RouterConfig holds all dependencies needed to build the HTTP router.
@@ -50,6 +51,9 @@ type RouterConfig struct {
 	CampaignService service.CampaignServicer
 	CampaignRunner  handlers.CampaignRunner
 	CampaignState   *campaign.State
+
+	// Storage backs the /results and /runs routes.
+	Storage *storage.Store
 }
 
 // NewRouter builds a chi.Mux with the KITT scaffold routes registered.
@@ -118,6 +122,15 @@ func NewRouter(cfg *RouterConfig) *chi.Mux {
 			r.Put("/campaigns/{id}/schedule", campH.UpdateSchedule)
 			r.Get("/campaigns/{id}/status", campH.Status)
 		}
+
+		// Results + quicktest.
+		if cfg.Storage != nil {
+			runH := handlers.NewRunHandler(cfg.Storage, cfg.Logger)
+			r.Get("/results", runH.List)
+			r.Get("/runs/{id}", runH.Get)
+		}
+		quickH := handlers.NewQuickTestHandler(cfg.Logger)
+		r.Get("/quicktest/{id}/logs", quickH.Logs)
 	})
 
 	return r
