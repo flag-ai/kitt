@@ -1,4 +1,4 @@
-.PHONY: dev test test-integration lint security sqlc build docker docker-up docker-down
+.PHONY: dev test test-integration lint security sqlc build docker docker-up docker-down smoke-benchmarks
 
 # Development — bring up Postgres so `go run ./cmd/kitt serve` just works.
 dev:
@@ -38,3 +38,12 @@ docker-up:
 
 docker-down:
 	docker compose down
+
+# Smoke test every reference benchmark against the stdlib mock engine.
+# Installs httpx/pyyaml/jsonschema into a throwaway venv so CI and
+# local runs don't depend on a pre-seeded Python environment.
+smoke-benchmarks:
+	@VENV=$$(mktemp -d)/smoke-venv && \
+	python3 -m venv $$VENV && \
+	$$VENV/bin/pip install --quiet httpx==0.27.2 pyyaml==6.0.2 jsonschema==4.23.0 && \
+	$$VENV/bin/python3 benchmarks-reference/tools/smoke_test.py

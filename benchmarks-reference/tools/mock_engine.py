@@ -14,9 +14,7 @@ Or import MockEngineServer to embed.
 
 from __future__ import annotations
 
-import base64
 import json
-import random
 import sys
 import time
 from http.server import BaseHTTPRequestHandler, HTTPServer
@@ -69,7 +67,19 @@ class _Handler(BaseHTTPRequestHandler):
             prompt_field = " ".join(str(p) for p in prompt_field)
         messages = body.get("messages") or []
         if messages and not prompt_field:
-            prompt_field = "\n".join(m.get("content", "") for m in messages if isinstance(m, dict))
+            parts: list[str] = []
+            for m in messages:
+                if not isinstance(m, dict):
+                    continue
+                c = m.get("content", "")
+                if isinstance(c, str):
+                    parts.append(c)
+                elif isinstance(c, list):
+                    # Content parts (vision shape): pick text parts.
+                    for p in c:
+                        if isinstance(p, dict) and p.get("type") == "text":
+                            parts.append(str(p.get("text", "")))
+            prompt_field = "\n".join(parts)
         prompt_lower = prompt_field.lower()
 
         if "####" in prompt_field or "grade school" in prompt_lower:
@@ -162,6 +172,4 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    # Silence "unused" lint for base64/random imported for future extension.
-    _ = base64, random
     sys.exit(main())
