@@ -12,6 +12,7 @@ import (
 	"github.com/flag-ai/kitt/internal/api/middleware"
 	"github.com/flag-ai/kitt/internal/campaign"
 	"github.com/flag-ai/kitt/internal/engines"
+	"github.com/flag-ai/kitt/internal/notifications"
 	"github.com/flag-ai/kitt/internal/service"
 	"github.com/flag-ai/kitt/internal/storage"
 )
@@ -54,6 +55,9 @@ type RouterConfig struct {
 
 	// Storage backs the /results and /runs routes.
 	Storage *storage.Store
+
+	// Notifier backs /notifications/test.
+	Notifier *notifications.Notifier
 }
 
 // NewRouter builds a chi.Mux with the KITT scaffold routes registered.
@@ -131,6 +135,12 @@ func NewRouter(cfg *RouterConfig) *chi.Mux {
 		}
 		quickH := handlers.NewQuickTestHandler(cfg.Logger)
 		r.Get("/quicktest/{id}/logs", quickH.Logs)
+
+		// Notifications.
+		if cfg.Notifier != nil {
+			notifH := handlers.NewNotificationHandler(cfg.Notifier, cfg.Logger)
+			r.Post("/notifications/test", notifH.Test)
+		}
 	})
 
 	return r
