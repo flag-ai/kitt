@@ -1,1 +1,0 @@
-"""KITT Web UI package."""
