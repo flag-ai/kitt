@@ -4,6 +4,7 @@ import (
 	"context"
 	"log/slog"
 	"sync"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/robfig/cron/v3"
@@ -99,8 +100,14 @@ func (s *Scheduler) Reload(ctx context.Context) error {
 	return nil
 }
 
+// scheduledRunTimeout caps how long a scheduled campaign run may
+// execute before being cancelled. Matches the RunNow handler timeout.
+const scheduledRunTimeout = 6 * time.Hour
+
 // fire resolves the campaign by id and dispatches it through the runner.
-func (s *Scheduler) fire(ctx context.Context, id uuid.UUID) {
+func (s *Scheduler) fire(_ context.Context, id uuid.UUID) {
+	ctx, cancel := context.WithTimeout(context.Background(), scheduledRunTimeout)
+	defer cancel()
 	c, err := s.fetcher.Get(ctx, id)
 	if err != nil {
 		s.logger.Error("campaign: scheduled fetch failed", "id", id, "error", err)
