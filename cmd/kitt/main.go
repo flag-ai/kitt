@@ -32,6 +32,7 @@ import (
 	"github.com/flag-ai/kitt/internal/db/sqlc"
 	"github.com/flag-ai/kitt/internal/engines"
 	"github.com/flag-ai/kitt/internal/service"
+	"github.com/flag-ai/kitt/internal/storage"
 
 	// Side-effect imports — each engine package registers itself with
 	// engines.Default on init().
@@ -135,6 +136,7 @@ func serve() error {
 	agentSvc := service.NewAgentService(queries, registry, logger)
 	engineProfileSvc := service.NewEngineProfileService(queries, engines.Default, logger)
 	benchmarkSvc := service.NewBenchmarkRegistryService(queries, logger)
+	runStore := storage.New(queries)
 
 	// Campaign control plane: state is shared between the runner
 	// (producer) and the /campaigns/{id}/status SSE endpoint (consumer).
@@ -172,6 +174,7 @@ func serve() error {
 		CampaignService:      campaignSvc,
 		CampaignRunner:       campaignRunner,
 		CampaignState:        campaignState,
+		Storage:              runStore,
 	})
 
 	srv := &http.Server{
