@@ -38,6 +38,10 @@ type RouterConfig struct {
 
 	// EngineProfileService backs the /engines/profiles CRUD routes.
 	EngineProfileService service.EngineProfileServicer
+
+	// BenchmarkService backs /benchmarks CRUD. May be nil during
+	// early bring-up.
+	BenchmarkService service.BenchmarkRegistryServicer
 }
 
 // NewRouter builds a chi.Mux with the KITT scaffold routes registered.
@@ -83,6 +87,16 @@ func NewRouter(cfg *RouterConfig) *chi.Mux {
 		r.Get("/engines/profiles/{id}", engineH.GetProfile)
 		r.Put("/engines/profiles/{id}", engineH.UpdateProfile)
 		r.Delete("/engines/profiles/{id}", engineH.DeleteProfile)
+
+		// Benchmark registry.
+		if cfg.BenchmarkService != nil {
+			benchH := handlers.NewBenchmarkHandler(cfg.BenchmarkService, cfg.Logger)
+			r.Get("/benchmarks", benchH.List)
+			r.Post("/benchmarks", benchH.Create)
+			r.Get("/benchmarks/{id}", benchH.Get)
+			r.Put("/benchmarks/{id}", benchH.Update)
+			r.Delete("/benchmarks/{id}", benchH.Delete)
+		}
 	})
 
 	return r
