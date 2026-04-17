@@ -2,6 +2,7 @@
 package api
 
 import (
+	"io/fs"
 	"log/slog"
 
 	"github.com/go-chi/chi/v5"
@@ -62,6 +63,10 @@ type RouterConfig struct {
 
 	// Recommender backs /recommend. May be nil to omit the route.
 	Recommender *recommendation.Recommender
+
+	// SPAFS is the embedded React SPA filesystem. When nil, no SPA
+	// fallback handler is registered (useful for API-only deploys).
+	SPAFS fs.FS
 }
 
 // NewRouter builds a chi.Mux with the KITT scaffold routes registered.
@@ -153,6 +158,12 @@ func NewRouter(cfg *RouterConfig) *chi.Mux {
 			r.Post("/recommend", recH.Recommend)
 		}
 	})
+
+	// SPA fallback — must be registered last so API routes take
+	// precedence over the wildcard match.
+	if cfg.SPAFS != nil {
+		r.Get("/*", SPAHandler(cfg.SPAFS))
+	}
 
 	return r
 }
