@@ -52,14 +52,17 @@ func TestNotifier_ErrorDoesNotStopOthers(t *testing.T) {
 
 func TestSlackChannel_PostsBody(t *testing.T) {
 	var got map[string]any
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	srv := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if err := json.NewDecoder(r.Body).Decode(&got); err != nil {
 			t.Errorf("decode: %v", err)
 		}
 		w.WriteHeader(http.StatusNoContent)
 	}))
 	defer srv.Close()
-	c := NewSlackChannel(srv.URL, nil)
+	c, err := NewSlackChannel(srv.URL, srv.Client())
+	if err != nil {
+		t.Fatalf("new slack channel: %v", err)
+	}
 	if err := c.Send(context.Background(), &Event{Kind: EventCampaignStarted, Title: "T"}); err != nil {
 		t.Fatalf("send: %v", err)
 	}
@@ -70,14 +73,17 @@ func TestSlackChannel_PostsBody(t *testing.T) {
 
 func TestDiscordChannel_PostsEmbed(t *testing.T) {
 	var got discordPayload
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	srv := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if err := json.NewDecoder(r.Body).Decode(&got); err != nil {
 			t.Errorf("decode: %v", err)
 		}
 		w.WriteHeader(http.StatusNoContent)
 	}))
 	defer srv.Close()
-	c := NewDiscordChannel(srv.URL, nil)
+	c, err := NewDiscordChannel(srv.URL, srv.Client())
+	if err != nil {
+		t.Fatalf("new discord channel: %v", err)
+	}
 	if err := c.Send(context.Background(), &Event{Kind: EventCampaignFinished, Title: "T", Message: "m"}); err != nil {
 		t.Fatalf("send: %v", err)
 	}

@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"strings"
 )
 
@@ -16,12 +17,17 @@ type SlackChannel struct {
 	http       *http.Client
 }
 
-// NewSlackChannel constructs a SlackChannel.
-func NewSlackChannel(webhookURL string, httpClient *http.Client) *SlackChannel {
+// NewSlackChannel constructs a SlackChannel. Returns an error if the
+// webhook URL does not use the https scheme.
+func NewSlackChannel(webhookURL string, httpClient *http.Client) (*SlackChannel, error) {
+	parsed, err := url.Parse(webhookURL)
+	if err != nil || parsed.Scheme != "https" {
+		return nil, fmt.Errorf("slack: webhook URL must use https scheme")
+	}
 	if httpClient == nil {
 		httpClient = http.DefaultClient
 	}
-	return &SlackChannel{webhookURL: webhookURL, http: httpClient}
+	return &SlackChannel{webhookURL: webhookURL, http: httpClient}, nil
 }
 
 // Name returns the channel identifier.

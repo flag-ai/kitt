@@ -143,10 +143,20 @@ func serve() error {
 	// configured chat channels.
 	var notifChannels []notifications.Channel
 	if cfg.SlackWebhook != "" {
-		notifChannels = append(notifChannels, notifications.NewSlackChannel(cfg.SlackWebhook, nil))
+		ch, err := notifications.NewSlackChannel(cfg.SlackWebhook, nil)
+		if err != nil {
+			logger.Error("invalid Slack webhook URL", "error", err)
+		} else {
+			notifChannels = append(notifChannels, ch)
+		}
 	}
 	if cfg.DiscordWebhook != "" {
-		notifChannels = append(notifChannels, notifications.NewDiscordChannel(cfg.DiscordWebhook, nil))
+		ch, err := notifications.NewDiscordChannel(cfg.DiscordWebhook, nil)
+		if err != nil {
+			logger.Error("invalid Discord webhook URL", "error", err)
+		} else {
+			notifChannels = append(notifChannels, ch)
+		}
 	}
 	notifier := notifications.NewNotifier(logger, notifChannels...)
 

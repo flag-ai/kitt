@@ -13,6 +13,7 @@ package notifications
 import (
 	"context"
 	"log/slog"
+	"sync"
 	"time"
 )
 
@@ -62,9 +63,14 @@ func NewNotifier(logger *slog.Logger, channels ...Channel) *Notifier {
 	return &Notifier{channels: channels, logger: logger}
 }
 
+// perChannelTimeout is the maximum time a single channel send may take
+// before being cancelled.
+const perChannelTimeout = 10 * time.Second
+
 // Send dispatches event to every registered channel in parallel,
-// returning once each has either completed or timed out. Errors are
-// logged; callers never see them because notifications are
+// returning once all have completed or timed out. Each channel gets
+// its own 10-second context so a slow webhook cannot starve the rest.
+// Errors are logged; callers never see them because notifications are
 // best-effort.
 func (n *Notifier) Send(ctx context.Context, event *Event) {
 	if len(n.channels) == 0 {
@@ -73,14 +79,18 @@ func (n *Notifier) Send(ctx context.Context, event *Event) {
 	if event.Timestamp.IsZero() {
 		event.Timestamp = time.Now().UTC()
 	}
-	// Cap each channel at 10 seconds so a stuck webhook can't block
-	// the campaign runner.
-	sendCtx, cancel := context.WithTimeout(ctx, 10*time.Second)
-	defer cancel()
+	var wg sync.WaitGroup
 	for _, ch := range n.channels {
-		if err := ch.Send(sendCtx, event); err != nil {
-			n.logger.Warn("notifications: send failed",
-				"channel", ch.Name(), "kind", event.Kind, "error", err)
-		}
+		wg.Add(1)
+		go func(ch Channel) {
+			defer wg.Done()
+			chCtx, cancel := context.WithTimeout(ctx, perChannelTimeout)
+			defer cancel()
+			if err := ch.Send(chCtx, event); err != nil {
+				n.logger.Warn("notifications: send failed",
+					"channel", ch.Name(), "kind", event.Kind, "error", err)
+			}
+		}(ch)
 	}
+	wg.Wait()
 }

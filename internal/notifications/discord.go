@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 )
 
 // DiscordChannel delivers events to a Discord webhook.
@@ -15,12 +16,17 @@ type DiscordChannel struct {
 	http       *http.Client
 }
 
-// NewDiscordChannel constructs a DiscordChannel.
-func NewDiscordChannel(webhookURL string, httpClient *http.Client) *DiscordChannel {
+// NewDiscordChannel constructs a DiscordChannel. Returns an error if
+// the webhook URL does not use the https scheme.
+func NewDiscordChannel(webhookURL string, httpClient *http.Client) (*DiscordChannel, error) {
+	parsed, err := url.Parse(webhookURL)
+	if err != nil || parsed.Scheme != "https" {
+		return nil, fmt.Errorf("discord: webhook URL must use https scheme")
+	}
 	if httpClient == nil {
 		httpClient = http.DefaultClient
 	}
-	return &DiscordChannel{webhookURL: webhookURL, http: httpClient}
+	return &DiscordChannel{webhookURL: webhookURL, http: httpClient}, nil
 }
 
 // Name returns the channel identifier.
