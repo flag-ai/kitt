@@ -4,6 +4,7 @@ import (
 	"errors"
 	"log/slog"
 	"net/http"
+	"net/url"
 
 	"github.com/flag-ai/kitt/internal/service"
 )
@@ -49,6 +50,11 @@ func (h *AgentHandler) Create(w http.ResponseWriter, r *http.Request) {
 	}
 	if req.Name == "" || req.URL == "" || req.Token == "" {
 		writeError(w, http.StatusBadRequest, "name, url, and token are required")
+		return
+	}
+	parsed, err := url.ParseRequestURI(req.URL)
+	if err != nil || (parsed.Scheme != "http" && parsed.Scheme != "https") {
+		writeError(w, http.StatusBadRequest, "url must use http or https scheme")
 		return
 	}
 	agent, err := h.svc.Create(r.Context(), req.Name, req.URL, req.Token)
