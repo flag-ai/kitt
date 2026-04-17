@@ -105,6 +105,25 @@ func (h *EngineHandler) UpdateProfile(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusBadRequest, "invalid json body")
 		return
 	}
+	// Reject attempts to change the engine field — profiles are bound
+	// to a specific engine at creation time and reassignment would
+	// invalidate build/runtime config assumptions.
+	if req.Engine != "" {
+		existing, err := h.profileSvc.Get(r.Context(), id)
+		if err != nil {
+			if errors.Is(err, service.ErrNotFound) {
+				writeError(w, http.StatusNotFound, "profile not found")
+				return
+			}
+			h.logger.Error("fetch engine profile for update check failed", "error", err, "id", id)
+			writeError(w, http.StatusInternalServerError, "update profile failed")
+			return
+		}
+		if req.Engine != existing.Engine {
+			writeError(w, http.StatusBadRequest, "engine field cannot be changed after creation")
+			return
+		}
+	}
 	p := models.EngineProfile{
 		ID:            id,
 		Name:          req.Name,
