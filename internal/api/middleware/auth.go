@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"crypto/subtle"
+	"encoding/json"
 	"net/http"
 	"strings"
 )
@@ -44,5 +45,6 @@ func writeUnauthorized(w http.ResponseWriter, msg string) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("WWW-Authenticate", `Bearer realm="kitt"`)
 	w.WriteHeader(http.StatusUnauthorized)
-	_, _ = w.Write([]byte(`{"error":"` + msg + `"}`))
+	body, _ := json.Marshal(map[string]string{"error": msg})
+	_, _ = w.Write(body)
 }
