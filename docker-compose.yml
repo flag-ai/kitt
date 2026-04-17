@@ -1,11 +1,42 @@
 services:
-  kitt:
-    build: .
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock  # Manage sibling containers
-      - ./configs:/app/configs
-      - ./kitt-results:/app/kitt-results            # Persist results
-      - ${MODEL_PATH:-/models}:/models:ro           # Model files
-    network_mode: host                              # Share host network
+  postgres:
+    image: postgres:17-alpine
     environment:
-      - HF_TOKEN=${HF_TOKEN:-}
+      POSTGRES_DB: ${POSTGRES_DB:-kitt}
+      POSTGRES_USER: ${POSTGRES_USER:-kitt}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-kitt}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  kitt:
+    build:
+      context: .
+      args:
+        VERSION: dev
+        COMMIT: local
+        BUILD_DATE: "2026-04-16"
+    ports:
+      - "8080:8080"
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-kitt}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-kitt}?sslmode=disable
+      KITT_ADMIN_TOKEN: ${KITT_ADMIN_TOKEN:?Set KITT_ADMIN_TOKEN in .env}
+      KITT_DEVON_URL: ${KITT_DEVON_URL:-}
+      KITT_DEVON_TOKEN: ${KITT_DEVON_TOKEN:-}
+      KITT_SLACK_WEBHOOK: ${KITT_SLACK_WEBHOOK:-}
+      KITT_DISCORD_WEBHOOK: ${KITT_DISCORD_WEBHOOK:-}
+      KITT_CORS_ORIGINS: ${KITT_CORS_ORIGINS:-}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      LOG_FORMAT: ${LOG_FORMAT:-text}
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  pgdata:

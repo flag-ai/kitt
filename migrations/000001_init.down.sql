@@ -1,0 +1,10 @@
+DROP TABLE IF EXISTS notification_configs;
+DROP TABLE IF EXISTS metrics;
+DROP TABLE IF EXISTS benchmarks;
+DROP TABLE IF EXISTS campaign_runs;
+DROP TABLE IF EXISTS runs;
+DROP TABLE IF EXISTS campaigns;
+DROP TABLE IF EXISTS benchmark_registry;
+DROP TABLE IF EXISTS engine_profiles;
+DROP TABLE IF EXISTS hardware;
+DROP TABLE IF EXISTS kitt_bonnie_agents;
