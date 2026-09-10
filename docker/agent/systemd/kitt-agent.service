@@ -1,0 +1,28 @@
+[Unit]
+Description=KITT Benchmark Agent
+Documentation=https://github.com/kirizan/kitt
+After=network-online.target docker.service
+Wants=network-online.target
+Requires=docker.service
+
+[Service]
+Type=simple
+User=%i
+Group=%i
+ExecStart=/usr/local/bin/kitt agent start --foreground
+ExecStop=/usr/local/bin/kitt agent stop
+Restart=on-failure
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+# Security hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ReadWritePaths=/home/%i/.kitt /tmp
+
+# Environment
+Environment=PATH=/usr/local/bin:/usr/bin:/bin
+
+[Install]
+WantedBy=multi-user.target

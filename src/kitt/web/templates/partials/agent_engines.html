@@ -1,0 +1,44 @@
+<div id="agent-engines-data">
+    {% if engines %}
+    <table class="w-full text-sm">
+        <thead>
+            <tr class="text-left text-kitt-dim border-b border-kitt-primary/20">
+                <th class="pb-2 pr-4">Engine</th>
+                <th class="pb-2 pr-4">Mode</th>
+                <th class="pb-2 pr-4">Status</th>
+                <th class="pb-2 pr-4">Version</th>
+                <th class="pb-2">Binary Path</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-kitt-primary/10">
+            {% for eng in engines %}
+            <tr>
+                <td class="py-2 pr-4 font-medium">{{ eng.engine }}</td>
+                <td class="py-2 pr-4">
+                    <span class="inline-block px-2 py-0.5 rounded text-xs
+                        {% if eng.mode == 'docker' %}bg-blue-900/50 text-blue-300
+                        {% else %}bg-green-900/50 text-green-300{% endif %}">
+                        {{ eng.mode }}
+                    </span>
+                </td>
+                <td class="py-2 pr-4">
+                    <span class="inline-flex items-center space-x-1.5 text-xs">
+                        <span class="w-2 h-2 rounded-full
+                            {% if eng.status == 'running' %}bg-green-400
+                            {% elif eng.status == 'installed' %}bg-blue-400
+                            {% else %}bg-gray-600{% endif %}"></span>
+                        <span class="{% if eng.status == 'running' %}text-green-300
+                            {% elif eng.status == 'installed' %}text-blue-300
+                            {% else %}text-kitt-dim{% endif %}">{{ eng.status }}</span>
+                    </span>
+                </td>
+                <td class="py-2 pr-4 text-xs font-mono text-kitt-dim">{{ eng.version or '-' }}</td>
+                <td class="py-2 text-xs font-mono text-kitt-dim truncate max-w-xs" title="{{ eng.binary_path }}">{{ eng.binary_path or '-' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="text-kitt-dim text-sm">No engine data yet. Engine status is reported via agent heartbeat.</p>
+    {% endif %}
+</div>

@@ -1,0 +1,22 @@
+name: warmup_performance_analysis
+version: "1.0.0"
+category: performance
+description: "Measure warmup phase performance and CUDA kernel initialization times"
+
+# Disable warmup for this test - we're testing warmup itself
+warmup:
+  enabled: false
+
+test_config:
+  iterations: 10
+  measure_each_iteration: true
+  prompts:
+    - "Translate this to French: Hello, how are you?"
+    - "Summarize this text in one sentence: The quick brown fox jumps over the lazy dog."
+    - "Write a haiku about technology."
+
+sampling:
+  temperature: 0.0
+  max_tokens: 100
+
+runs: 3

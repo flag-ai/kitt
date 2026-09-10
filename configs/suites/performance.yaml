@@ -1,0 +1,21 @@
+suite_name: performance
+version: "1.0.0"
+description: "Performance-focused benchmark suite"
+
+tests:
+  - throughput
+  - latency
+  - memory_usage
+  - warmup_analysis
+
+global_config:
+  runs: 3
+
+sampling_overrides:
+  temperature: 0.0
+  max_tokens: 2048
+
+test_overrides:
+  warmup_analysis:
+    warmup:
+      enabled: false

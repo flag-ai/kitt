@@ -1,0 +1,42 @@
+version: "3.8"
+
+services:
+  kitt-server:
+    build:
+      context: ../..
+      dockerfile: docker/web/Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - kitt-data:/data
+      - kitt-certs:/root/.kitt/certs
+      - kitt-results:/app/kitt-results
+    environment:
+      - KITT_SECRET_KEY=${KITT_SECRET_KEY:-}
+      - KITT_AUTH_TOKEN=${KITT_AUTH_TOKEN:-changeme}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "-k", "https://localhost:8080/api/v1/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # Optional: PostgreSQL for larger deployments
+  # postgres:
+  #   image: postgres:16-alpine
+  #   environment:
+  #     POSTGRES_DB: kitt
+  #     POSTGRES_USER: kitt
+  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-kitt}
+  #   volumes:
+  #     - postgres-data:/var/lib/postgresql/data
+  #   ports:
+  #     - "5432:5432"
+  #   restart: unless-stopped
+
+volumes:
+  kitt-data:
+  kitt-certs:
+  kitt-results:
+  # postgres-data:

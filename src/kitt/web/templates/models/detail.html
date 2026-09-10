@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}{{ model.name or model.model_id }} - Models - KITT{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="flex items-center justify-between mb-6">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{{ model.name or model.model_id }}</h1>
+            {% if model.source %}
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Source: {{ model.source }}</p>
+            {% endif %}
+        </div>
+        <a href="{{ url_for('models.library') }}"
+           class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">
+            &larr; Back to Library
+        </a>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Model Info -->
+        <div class="lg:col-span-2 bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+            <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Model Information</h2>
+
+            <dl class="grid grid-cols-2 gap-4">
+                {% if model.model_id %}
+                <div>
+                    <dt class="text-sm text-gray-500 dark:text-gray-400">Model ID</dt>
+                    <dd class="text-sm font-medium text-gray-900 dark:text-white">{{ model.model_id }}</dd>
+                </div>
+                {% endif %}
+
+                {% if model.size %}
+                <div>
+                    <dt class="text-sm text-gray-500 dark:text-gray-400">Size</dt>
+                    <dd class="text-sm font-medium text-gray-900 dark:text-white">{{ model.size }}</dd>
+                </div>
+                {% endif %}
+
+                {% if model.format %}
+                <div>
+                    <dt class="text-sm text-gray-500 dark:text-gray-400">Format</dt>
+                    <dd class="text-sm font-medium text-gray-900 dark:text-white">{{ model.format }}</dd>
+                </div>
+                {% endif %}
+
+                {% if model.quantization %}
+                <div>
+                    <dt class="text-sm text-gray-500 dark:text-gray-400">Quantization</dt>
+                    <dd class="text-sm font-medium text-gray-900 dark:text-white">{{ model.quantization }}</dd>
+                </div>
+                {% endif %}
+
+                {% if model.path %}
+                <div class="col-span-2">
+                    <dt class="text-sm text-gray-500 dark:text-gray-400">Local Path</dt>
+                    <dd class="text-sm font-mono text-gray-900 dark:text-white break-all">{{ model.path }}</dd>
+                </div>
+                {% endif %}
+            </dl>
+        </div>
+
+        <!-- Actions -->
+        <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+            <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Actions</h2>
+            <div class="space-y-3">
+                <a href="{{ url_for('quicktest.form') }}?model={{ model.path or model.model_id }}"
+                   class="w-full block text-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                    Quick Test
+                </a>
+
+                {% if model.path %}
+                <button hx-delete="/api/v1/models/{{ model.model_id }}"
+                        hx-confirm="Are you sure you want to remove this model?"
+                        hx-target="body"
+                        class="w-full px-4 py-2 border border-red-300 text-red-700 rounded-md hover:bg-red-50 dark:border-red-700 dark:text-red-400 dark:hover:bg-red-900/20">
+                    Remove from Library
+                </button>
+                {% else %}
+                <button hx-post="/api/v1/models/download"
+                        hx-vals='{"model_id": "{{ model.model_id }}"}'
+                        hx-swap="none"
+                        class="w-full px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+                    Download
+                </button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

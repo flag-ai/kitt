@@ -1,0 +1,46 @@
+name: hellaswag
+version: "1.0.0"
+category: quality_standard
+description: "HellaSwag - Commonsense NLI for sentence completion"
+
+warmup:
+  enabled: true
+  iterations: 3
+  log_warmup_times: true
+
+dataset:
+  source: Rowan/hellaswag
+  split: validation
+  sample_size: null
+
+prompts:
+  template: |
+    Complete the following sentence with the most logical continuation.
+
+    {context}
+
+    A. {choice_a}
+    B. {choice_b}
+    C. {choice_c}
+    D. {choice_d}
+
+    Answer:
+
+evaluation:
+  metrics:
+    - accuracy
+    - exact_match
+
+  answer_extraction:
+    method: first_letter
+    fallback: random
+
+sampling:
+  temperature: 0.0
+  top_p: 1.0
+  max_tokens: 10
+
+runs: 3
+
+performance_collection:
+  frequency: start_end

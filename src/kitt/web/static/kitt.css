@@ -1,0 +1,50 @@
+/* KITT Web UI — custom styles beyond Tailwind */
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Custom scrollbar for log panels */
+.font-mono::-webkit-scrollbar {
+    width: 6px;
+}
+.font-mono::-webkit-scrollbar-track {
+    background: transparent;
+}
+.font-mono::-webkit-scrollbar-thumb {
+    background: #0f3460;
+    border-radius: 3px;
+}
+.font-mono::-webkit-scrollbar-thumb:hover {
+    background: #e94560;
+}
+
+/* HTMX request indicator */
+.htmx-indicator {
+    display: none;
+}
+.htmx-request .htmx-indicator {
+    display: inline;
+}
+.htmx-request.htmx-indicator {
+    display: inline;
+}
+
+/* SSE log stream auto-scroll */
+#log-stream {
+    overflow-anchor: auto;
+}
+#log-stream > :last-child {
+    overflow-anchor: auto;
+}
+
+/* Table row click cursor */
+tr[onclick] {
+    cursor: pointer;
+}
+
+/* Transition for flash messages */
+[x-cloak] {
+    display: none !important;
+}

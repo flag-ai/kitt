@@ -1,0 +1,6 @@
+name: vllm
+parameters:
+  tensor_parallel_size: 1
+  gpu_memory_utilization: 0.9
+  dtype: auto
+  trust_remote_code: false

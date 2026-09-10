@@ -1,0 +1,35 @@
+<tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+    <td class="px-6 py-4">
+        <a href="{{ url_for('results.detail', result_id=result.id) }}"
+           class="text-blue-600 dark:text-blue-400 hover:underline font-medium">
+            {{ result.model or 'Unknown' }}
+        </a>
+    </td>
+    <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+        {{ result.engine or '-' }}
+    </td>
+    <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+        {{ result.suite_name or '-' }}
+    </td>
+    <td class="px-6 py-4">
+        {% if result.passed %}
+        <span class="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+            Passed
+        </span>
+        {% else %}
+        <span class="px-2 py-1 text-xs font-medium rounded-full bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
+            Failed
+        </span>
+        {% endif %}
+    </td>
+    <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+        {{ result.total_benchmarks or 0 }} benchmarks
+    </td>
+    <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+        {{ result.timestamp[:16] if result.timestamp else '-' }}
+    </td>
+    <td class="px-6 py-4 text-right">
+        <input type="checkbox" name="compare" value="{{ result.id }}"
+               class="rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500">
+    </td>
+</tr>

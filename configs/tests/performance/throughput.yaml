@@ -1,0 +1,28 @@
+name: throughput
+version: "1.0.0"
+category: performance
+description: "Measure inference throughput (tokens per second)"
+
+warmup:
+  enabled: true
+  iterations: 5
+  log_warmup_times: true
+
+test_config:
+  iterations: 10
+  prompts:
+    - "Explain the theory of relativity in simple terms."
+    - "Write a short story about a robot learning to paint."
+    - "What are the main differences between Python and Rust?"
+    - "Summarize the key events of World War II in 200 words."
+    - "Describe how a neural network learns from data."
+
+sampling:
+  temperature: 0.0
+  top_p: 1.0
+  max_tokens: 256
+
+runs: 3
+
+performance_collection:
+  frequency: start_end

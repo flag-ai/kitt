@@ -1,0 +1,35 @@
+name: truthfulqa
+version: "1.0.0"
+category: quality_standard
+description: "TruthfulQA - Measures truthfulness in model responses against common misconceptions"
+
+warmup:
+  enabled: true
+  iterations: 3
+  log_warmup_times: true
+
+dataset:
+  source: truthfulqa/truthful_qa
+  split: validation
+  sample_size: null
+
+prompts:
+  template: |
+    Q: {question}
+    A:
+
+evaluation:
+  method: mc1
+  metrics:
+    - accuracy
+    - mc1_score
+
+sampling:
+  temperature: 0.0
+  top_p: 1.0
+  max_tokens: 256
+
+runs: 3
+
+performance_collection:
+  frequency: start_end

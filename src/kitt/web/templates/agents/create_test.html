@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}KITT - Create Test Agent{% endblock %}
+
+{% block content %}
+<div class="space-y-6 max-w-3xl">
+    <div>
+        <h1 class="text-2xl font-bold">Create Test Agent</h1>
+        <p class="text-kitt-dim text-sm mt-1">Create a virtual agent for UI testing — no real hardware required</p>
+    </div>
+
+    <form action="/agents/create-test" method="POST" class="bg-kitt-surface rounded-lg p-6 space-y-5">
+        <!-- Name -->
+        <div class="space-y-1">
+            <label for="name" class="text-sm font-medium">Name <span class="text-red-400">*</span></label>
+            <input type="text" id="name" name="name" required
+                   placeholder="my-test-gpu"
+                   class="w-full bg-kitt-bg border border-kitt-primary/50 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-kitt-accent">
+        </div>
+
+        <!-- GPU Model -->
+        <div class="space-y-1">
+            <label for="gpu_info" class="text-sm font-medium">GPU Model</label>
+            <input type="text" id="gpu_info" name="gpu_info"
+                   value="NVIDIA RTX 4090 24GB"
+                   class="w-full bg-kitt-bg border border-kitt-primary/50 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-kitt-accent">
+        </div>
+
+        <!-- GPU Count -->
+        <div class="space-y-1">
+            <label for="gpu_count" class="text-sm font-medium">GPU Count</label>
+            <input type="number" id="gpu_count" name="gpu_count" min="1" max="16"
+                   value="1"
+                   class="w-24 bg-kitt-bg border border-kitt-primary/50 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-kitt-accent">
+        </div>
+
+        <!-- CPU Model -->
+        <div class="space-y-1">
+            <label for="cpu_info" class="text-sm font-medium">CPU Model</label>
+            <input type="text" id="cpu_info" name="cpu_info"
+                   value="Intel Core i9-13900K"
+                   class="w-full bg-kitt-bg border border-kitt-primary/50 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-kitt-accent">
+        </div>
+
+        <!-- CPU Architecture -->
+        <div class="space-y-1">
+            <label for="cpu_arch" class="text-sm font-medium">CPU Architecture</label>
+            <select id="cpu_arch" name="cpu_arch"
+                    class="bg-kitt-bg border border-kitt-primary/50 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-kitt-accent">
+                <option value="x86_64" selected>x86_64</option>
+                <option value="aarch64">aarch64</option>
+            </select>
+        </div>
+
+        <!-- RAM -->
+        <div class="space-y-1">
+            <label for="ram_gb" class="text-sm font-medium">RAM (GB)</label>
+            <input type="number" id="ram_gb" name="ram_gb" min="1" max="2048"
+                   value="64"
+                   class="w-24 bg-kitt-bg border border-kitt-primary/50 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-kitt-accent">
+        </div>
+
+        <!-- Environment Type -->
+        <div class="space-y-1">
+            <label for="environment_type" class="text-sm font-medium">Environment Type</label>
+            <select id="environment_type" name="environment_type"
+                    class="bg-kitt-bg border border-kitt-primary/50 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-kitt-accent">
+                <option value="native_linux" selected>native_linux</option>
+                <option value="native_macos">native_macos</option>
+                <option value="wsl2">wsl2</option>
+                <option value="docker">docker</option>
+                <option value="dgx_spark">dgx_spark</option>
+            </select>
+        </div>
+
+        <div class="pt-2">
+            <button type="submit"
+                    class="bg-kitt-accent hover:bg-kitt-accent/80 text-white px-6 py-2 rounded-md text-sm font-medium transition-colors">
+                Create Test Agent
+            </button>
+            <a href="/agents" class="text-kitt-dim hover:text-kitt-text text-sm ml-4">Cancel</a>
+        </div>
+    </form>
+
+    <div class="bg-kitt-surface rounded-lg p-5">
+        <h2 class="text-lg font-semibold mb-2">About Test Agents</h2>
+        <ul class="text-kitt-dim text-sm space-y-1 list-disc list-inside">
+            <li>Test agents are virtual — they don't require real hardware</li>
+            <li>They are always shown as "online" and never go stale</li>
+            <li>Quick tests and campaigns run simulated benchmarks with realistic delays</li>
+            <li>Results are generated with random but logically consistent metrics</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

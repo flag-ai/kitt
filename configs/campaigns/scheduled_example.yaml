@@ -1,0 +1,27 @@
+campaign_name: scheduled-nightly
+description: Nightly benchmark run (scheduled via cron)
+
+# Cron schedule: 2am daily
+schedule: "0 2 * * *"
+
+# Auto-compare with previous run
+auto_compare: true
+
+models:
+  - name: Qwen/Qwen2.5-7B-Instruct
+    params: "7B"
+
+engines:
+  - name: vllm
+    suite: standard
+  - name: llama_cpp
+    suite: standard
+    quant_filter: "Q4_K_M"
+
+notifications:
+  webhook_url: ""  # Set to your Slack/Discord webhook
+  notify_on: [failure, regression]
+
+disk:
+  reserve_gb: 50.0
+  cleanup_after_run: true

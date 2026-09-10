@@ -1,0 +1,114 @@
+name: 'KITT Benchmark'
+description: 'Run KITT inference engine benchmarks on self-hosted GPU runners'
+
+inputs:
+  config:
+    description: 'Path to campaign or suite config YAML'
+    required: true
+  model:
+    description: 'Model path or HuggingFace ID'
+    required: false
+    default: ''
+  engine:
+    description: 'Engine name (vllm, tgi, llama_cpp, ollama)'
+    required: false
+    default: ''
+  suite:
+    description: 'Benchmark suite (quick, standard, performance)'
+    required: false
+    default: 'quick'
+  results-dir:
+    description: 'Directory to store results'
+    required: false
+    default: 'kitt-results'
+  github-token:
+    description: 'GitHub token for posting PR comments'
+    required: false
+    default: ''
+  post-comment:
+    description: 'Post results as PR comment'
+    required: false
+    default: 'false'
+  fail-on-regression:
+    description: 'Fail the action if regressions are detected'
+    required: false
+    default: 'false'
+
+outputs:
+  results-path:
+    description: 'Path to results directory'
+    value: ${{ steps.run.outputs.results-path }}
+  passed:
+    description: 'Whether all benchmarks passed'
+    value: ${{ steps.run.outputs.passed }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Check GPU availability
+      shell: bash
+      run: |
+        echo "Checking GPU..."
+        nvidia-smi || { echo "::warning::No GPU detected"; }
+
+    - name: Install KITT
+      shell: bash
+      run: |
+        pip install poetry
+        poetry install --no-interaction
+
+    - name: Show hardware fingerprint
+      shell: bash
+      run: |
+        poetry run kitt fingerprint --verbose
+
+    - name: Run benchmarks
+      id: run
+      shell: bash
+      run: |
+        CONFIG="${{ inputs.config }}"
+        RESULTS_DIR="${{ inputs.results-dir }}"
+        mkdir -p "$RESULTS_DIR"
+
+        if echo "$CONFIG" | grep -q "campaign"; then
+          poetry run kitt campaign run "$CONFIG"
+        elif [ -n "${{ inputs.model }}" ] && [ -n "${{ inputs.engine }}" ]; then
+          poetry run kitt run \
+            -m "${{ inputs.model }}" \
+            -e "${{ inputs.engine }}" \
+            -s "${{ inputs.suite }}" \
+            -o "$RESULTS_DIR"
+        else
+          echo "::error::Provide either a campaign config or --model and --engine"
+          exit 1
+        fi
+
+        echo "results-path=$RESULTS_DIR" >> "$GITHUB_OUTPUT"
+
+        # Check pass/fail
+        LATEST=$(ls -td "$RESULTS_DIR"/*/ 2>/dev/null | head -1)
+        if [ -f "$LATEST/metrics.json" ]; then
+          PASSED=$(python3 -c "import json; d=json.load(open('$LATEST/metrics.json')); print(str(d.get('passed', False)).lower())")
+          echo "passed=$PASSED" >> "$GITHUB_OUTPUT"
+        else
+          echo "passed=true" >> "$GITHUB_OUTPUT"
+        fi
+
+    - name: Post PR comment
+      if: inputs.post-comment == 'true' && github.event_name == 'pull_request'
+      shell: bash
+      run: |
+        poetry run kitt ci report \
+          --results-dir "${{ inputs.results-dir }}" \
+          --github-token "${{ inputs.github-token || github.token }}" \
+          --repo "${{ github.repository }}" \
+          --pr "${{ github.event.pull_request.number }}"
+
+    - name: Check for regressions
+      if: inputs.fail-on-regression == 'true'
+      shell: bash
+      run: |
+        if [ "${{ steps.run.outputs.passed }}" = "false" ]; then
+          echo "::error::Benchmark regressions detected"
+          exit 1
+        fi
