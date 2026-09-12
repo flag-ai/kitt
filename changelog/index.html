@@ -1861,6 +1861,28 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#180" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.8.0
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#170" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.7.0
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#162" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2016,6 +2038,28 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#180" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.8.0
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#170" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.7.0
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#162" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2158,6 +2202,21 @@
 
 <h1 id="changelog">Changelog<a class="headerlink" href="#changelog" title="Permanent link">&para;</a></h1>
 <p>All notable changes to KITT are documented on this page.</p>
+<h2 id="180">1.8.0<a class="headerlink" href="#180" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Rolled back to the Python implementation</strong> — <code>main</code> now carries the Python tree again after the Go rewrite (2.0.0–2.9.1) was retired<ul>
+<li>The Go code is preserved in the <code>go-migration-2.9.1</code> tag and in <code>main</code>'s history; the 2.x version line is permanently retired</li>
+<li>Versions resume at 1.8.0 so the number never moves backwards (the thin agent's <code>update</code> command compares server versions)</li>
+<li>The Go-only <code>benchmarks-reference/</code> container library is not carried forward; it will return with the containerized benchmark dispatch port</li>
+</ul>
+</li>
+</ul>
+<h2 id="170">1.7.0<a class="headerlink" href="#170" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Added native (non-Docker) execution mode for engines, with <code>ProcessManager</code> handling host process lifecycle</li>
+<li>Added engine profiles — named build/runtime configurations stored in the <code>engine_profiles</code> table, selectable in quicktest and the campaign wizard</li>
+<li>Removed the TGI engine</li>
+</ul>
 <h2 id="162">1.6.2<a class="headerlink" href="#162" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Added real agent campaign dispatch via heartbeat — campaigns on real agents now break into individual quick test rows, queue them one at a time, and poll for completion using the existing heartbeat mechanism</li>
