@@ -36,9 +36,9 @@ collection, and result storage.
     a compact fingerprint for reproducibility.
 
 **Results Storage**
-:   All benchmark results persisted through results storage (Kitt's AI Results
-    Repository). Database-backed by default (SQLite or PostgreSQL) with full
-    query, aggregation, and export support.
+:   All benchmark results persisted through a `ResultStore` backend. Database-backed
+    by default (SQLite or PostgreSQL) with full query, aggregation, and export
+    support.
 
 **Multiple Output Formats**
 :   Export results as JSON, Markdown summaries, or comparison tables. JSON output

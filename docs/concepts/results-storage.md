@@ -8,7 +8,7 @@
     compatibility: `--store-karr`, `--karr`, and the `karr-<fingerprint>/` directory
     layout of the legacy git-backed store.
 
-KITT's results storage keeps every benchmark run queryable. Every benchmark run, hardware snapshot, and metric is persisted through results storage, giving you a queryable history of all testing activity.
+Every benchmark run, hardware snapshot, and metric KITT produces is persisted through results storage, giving you a queryable history of all testing activity.
 
 Results storage has evolved alongside KITT through multiple generations:
 

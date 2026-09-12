@@ -330,7 +330,7 @@ def _store_in_karr(
                 files[rel_path] = file_path.read_text()
 
     KARRRepoManager.store_results(karr_path, model_name, engine_name, timestamp, files)
-    console.print(f"[green]Results stored in results storage: {karr_path}[/green]")
+    console.print(f"[green]Results stored in git-backed store: {karr_path}[/green]")
 
 
 def _find_suite_config(suite_name: str) -> Path | None:
