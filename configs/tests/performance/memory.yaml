@@ -1,0 +1,22 @@
+name: memory_usage
+version: "1.0.0"
+category: performance
+description: "Profile GPU memory usage under different generation lengths"
+
+warmup:
+  enabled: true
+  iterations: 3
+
+test_config:
+  token_lengths: [64, 128, 256, 512, 1024, 2048]
+  prompts:
+    - "Write a detailed essay about the history of computing."
+
+sampling:
+  temperature: 0.0
+  top_p: 1.0
+
+runs: 3
+
+performance_collection:
+  frequency: continuous

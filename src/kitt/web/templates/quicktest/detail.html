@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+{% block title %}KITT - Quick Test: {{ test.model_path.split('/')[-1] if '/' in test.model_path else test.model_path }}{% endblock %}
+
+{% block content %}
+<div class="space-y-6"
+     x-data="testDetail()"
+     x-init="init()">
+    <!-- Header -->
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-2xl font-bold">{{ test.model_path.split('/')[-1] if '/' in test.model_path else test.model_path }}</h1>
+            <p class="text-kitt-dim text-sm mt-1">{{ test.model_path }}</p>
+        </div>
+        <span x-text="currentStatus"
+              :class="{
+                  'bg-blue-900/50 text-blue-300': currentStatus === 'running',
+                  'bg-green-900/50 text-green-300': currentStatus === 'completed',
+                  'bg-red-900/50 text-red-300': currentStatus === 'failed',
+                  'bg-yellow-900/50 text-yellow-300': currentStatus === 'queued' || currentStatus === 'dispatched',
+              }"
+              class="text-xs px-3 py-1 rounded-full font-medium"></span>
+    </div>
+
+    <!-- Info card -->
+    <div class="bg-kitt-surface rounded-lg p-5">
+        <h2 class="text-lg font-semibold mb-3">Details</h2>
+        <dl class="grid grid-cols-2 sm:grid-cols-3 gap-4 text-sm">
+            <div>
+                <dt class="text-kitt-dim">Agent</dt>
+                <dd class="font-medium">{{ test.agent_name or 'unknown' }}</dd>
+            </div>
+            <div>
+                <dt class="text-kitt-dim">Engine</dt>
+                <dd class="font-medium">{{ test.engine_name }}</dd>
+            </div>
+            <div>
+                <dt class="text-kitt-dim">Benchmark</dt>
+                <dd class="font-medium">{{ test.benchmark_name }}</dd>
+            </div>
+            <div>
+                <dt class="text-kitt-dim">Suite</dt>
+                <dd class="font-medium">{{ test.suite_name }}</dd>
+            </div>
+            <div>
+                <dt class="text-kitt-dim">Created</dt>
+                <dd>{{ test.created_at[:19] if test.created_at else '-' }}</dd>
+            </div>
+            <div>
+                <dt class="text-kitt-dim">Started</dt>
+                <dd>{{ test.started_at[:19] if test.started_at else '-' }}</dd>
+            </div>
+            {% if test.completed_at %}
+            <div>
+                <dt class="text-kitt-dim">Completed</dt>
+                <dd>{{ test.completed_at[:19] }}</dd>
+            </div>
+            {% endif %}
+        </dl>
+    </div>
+
+    <!-- Error block -->
+    {% if test.status == 'failed' and test.error %}
+    <div class="bg-red-900/30 border border-red-700 rounded-lg p-4">
+        <h2 class="text-sm font-semibold text-red-300 mb-1">Error</h2>
+        <pre class="text-sm text-red-200 whitespace-pre-wrap">{{ test.error }}</pre>
+    </div>
+    {% endif %}
+
+    <!-- Log output -->
+    <div class="bg-kitt-surface rounded-lg p-5">
+        <div class="flex items-center justify-between mb-3">
+            <h2 class="text-lg font-semibold">Logs</h2>
+            <div class="flex items-center gap-2">
+                <template x-if="isActive">
+                    <span class="flex items-center gap-1.5">
+                        <span x-show="sseConnected" class="w-2 h-2 rounded-full bg-green-400" title="SSE connected"></span>
+                        <span x-show="!sseConnected" class="w-2 h-2 rounded-full bg-yellow-400 animate-pulse" title="Connecting..."></span>
+                        <span class="text-xs text-kitt-dim">Live</span>
+                    </span>
+                </template>
+            </div>
+        </div>
+        <div x-ref="logContainer"
+             class="bg-kitt-bg rounded-md p-4 h-80 overflow-y-auto font-mono text-xs text-kitt-dim space-y-0.5">
+            <template x-for="(line, i) in logLines" :key="i">
+                <div x-text="line"></div>
+            </template>
+            <div x-show="logLines.length === 0" class="text-kitt-dim">
+                <span x-show="isActive">Waiting for logs...</span>
+                <span x-show="!isActive">No log lines recorded.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="flex items-center gap-4">
+        <a href="/quicktest" class="text-kitt-dim hover:text-white text-sm transition-colors">&larr; Back to history</a>
+        <a href="/quicktest/new" class="text-kitt-accent hover:underline text-sm">New Test</a>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function testDetail() {
+    return {
+        testId: '{{ test.id }}',
+        currentStatus: '{{ test.status }}',
+        logLines: [],
+        sseConnected: false,
+        _eventSource: null,
+
+        get isActive() {
+            return ['queued', 'dispatched', 'running'].includes(this.currentStatus);
+        },
+
+        init() {
+            if (this.isActive) {
+                this._connectSSE();
+            } else {
+                this._loadStoredLogs();
+            }
+        },
+
+        _scrollToBottom() {
+            this.$nextTick(() => {
+                const el = this.$refs.logContainer;
+                if (el) el.scrollTop = el.scrollHeight;
+            });
+        },
+
+        async _loadStoredLogs() {
+            try {
+                const resp = await fetch('/api/v1/quicktest/' + this.testId + '/logs');
+                const data = await resp.json();
+                if (data.lines) {
+                    this.logLines = data.lines.map(l => l.line);
+                    this._scrollToBottom();
+                }
+            } catch (e) {
+                console.warn('Failed to load stored logs:', e);
+            }
+        },
+
+        _connectSSE() {
+            if (this._eventSource) {
+                this._eventSource.close();
+            }
+
+            const url = '/api/v1/events/stream/' + this.testId;
+            const es = new EventSource(url);
+            this._eventSource = es;
+
+            es.onopen = () => {
+                this.sseConnected = true;
+            };
+
+            es.addEventListener('log', (e) => {
+                const data = JSON.parse(e.data);
+                this.logLines.push(data.line || data.message || '');
+                this._scrollToBottom();
+            });
+
+            es.addEventListener('status', (e) => {
+                const data = JSON.parse(e.data);
+                const newStatus = data.status || '';
+                if (newStatus && newStatus !== this.currentStatus) {
+                    this.currentStatus = newStatus;
+                    this.logLines.push('[status] ' + newStatus);
+                    this._scrollToBottom();
+                }
+                if (newStatus === 'completed' || newStatus === 'failed') {
+                    es.close();
+                    this.sseConnected = false;
+                }
+            });
+
+            es.onerror = () => {
+                this.sseConnected = false;
+                if (!this.isActive) {
+                    es.close();
+                }
+            };
+        },
+    };
+}
+</script>
+{% endblock %}

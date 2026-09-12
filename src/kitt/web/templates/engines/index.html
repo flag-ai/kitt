@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+{% block title %}KITT - Engines{% endblock %}
+
+{% block content %}
+<div class="space-y-8">
+    <div class="flex items-center justify-between">
+        <h1 class="text-2xl font-bold">Engines</h1>
+        <a href="/engines/profiles/new"
+           class="px-4 py-2 bg-kitt-accent text-white rounded-md hover:bg-kitt-accent/80 text-sm font-medium">
+            New Profile
+        </a>
+    </div>
+
+    <!-- Engine Registry -->
+    <div class="bg-kitt-surface rounded-lg p-5">
+        <h2 class="text-lg font-semibold mb-4">Engine Registry</h2>
+        <p class="text-kitt-dim text-sm mb-4">Registered inference engines and their supported execution modes.</p>
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead>
+                    <tr class="text-left text-kitt-dim border-b border-kitt-primary/20">
+                        <th class="pb-2 pr-4">Engine</th>
+                        <th class="pb-2 pr-4">Supported Modes</th>
+                        <th class="pb-2">Default Mode</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-kitt-primary/10">
+                    {% for engine in registry %}
+                    <tr>
+                        <td class="py-2.5 pr-4 font-medium">{{ engine.name }}</td>
+                        <td class="py-2.5 pr-4">
+                            {% for mode in engine.supported_modes %}
+                            <span class="inline-block px-2 py-0.5 rounded text-xs mr-1
+                                {% if mode == 'docker' %}bg-blue-900/50 text-blue-300
+                                {% else %}bg-green-900/50 text-green-300{% endif %}">
+                                {{ mode }}
+                            </span>
+                            {% endfor %}
+                        </td>
+                        <td class="py-2.5">
+                            <span class="text-xs
+                                {% if engine.default_mode == 'docker' %}text-blue-300
+                                {% else %}text-green-300{% endif %}">
+                                {{ engine.default_mode }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% if not registry %}
+                    <tr>
+                        <td colspan="3" class="py-4 text-center text-kitt-dim">No engines registered</td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Engine Profiles -->
+    <div class="bg-kitt-surface rounded-lg p-5">
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-semibold">Profiles</h2>
+            <span class="text-kitt-dim text-xs">{{ profiles|length }} profile(s)</span>
+        </div>
+        <p class="text-kitt-dim text-sm mb-4">Saved engine configurations for benchmarks and campaigns.</p>
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead>
+                    <tr class="text-left text-kitt-dim border-b border-kitt-primary/20">
+                        <th class="pb-2 pr-4">Name</th>
+                        <th class="pb-2 pr-4">Engine</th>
+                        <th class="pb-2 pr-4">Mode</th>
+                        <th class="pb-2 pr-4">Description</th>
+                        <th class="pb-2 text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-kitt-primary/10">
+                    {% for profile in profiles %}
+                    <tr>
+                        <td class="py-2.5 pr-4 font-medium">{{ profile.name }}</td>
+                        <td class="py-2.5 pr-4">{{ profile.engine }}</td>
+                        <td class="py-2.5 pr-4">
+                            <span class="inline-block px-2 py-0.5 rounded text-xs
+                                {% if profile.mode == 'docker' %}bg-blue-900/50 text-blue-300
+                                {% else %}bg-green-900/50 text-green-300{% endif %}">
+                                {{ profile.mode }}
+                            </span>
+                        </td>
+                        <td class="py-2.5 pr-4 text-kitt-dim">{{ profile.description or '-' }}</td>
+                        <td class="py-2.5 text-right space-x-2">
+                            <a href="/engines/profiles/{{ profile.id }}/edit"
+                               class="text-kitt-accent hover:underline text-xs">Edit</a>
+                            <form action="/engines/profiles/{{ profile.id }}/delete" method="POST"
+                                  class="inline" onsubmit="return confirm('Delete this profile?')">
+                                <button type="submit" class="text-red-400 hover:underline text-xs">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% if not profiles %}
+                    <tr>
+                        <td colspan="5" class="py-4 text-center text-kitt-dim">No profiles yet</td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Agent Engine Status Matrix -->
+    <div class="bg-kitt-surface rounded-lg p-5">
+        <h2 class="text-lg font-semibold mb-4">Agent Engine Status</h2>
+        <p class="text-kitt-dim text-sm mb-4">Native engine availability per agent (reported via heartbeat).</p>
+        {% if agents %}
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead>
+                    <tr class="text-left text-kitt-dim border-b border-kitt-primary/20">
+                        <th class="pb-2 pr-4">Agent</th>
+                        {% for engine in registry %}
+                        <th class="pb-2 pr-4 text-center">{{ engine.name }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-kitt-primary/10">
+                    {% for agent in agents %}
+                    <tr>
+                        <td class="py-2.5 pr-4">
+                            <a href="/agents/{{ agent.id }}" class="text-kitt-accent hover:underline">
+                                {{ agent.name }}
+                            </a>
+                        </td>
+                        {% set agent_engines = matrix.get(agent.id, []) %}
+                        {% for engine in registry %}
+                        <td class="py-2.5 pr-4 text-center">
+                            {% set found = namespace(status='') %}
+                            {% for ae in agent_engines %}
+                                {% if ae.engine == engine.name %}
+                                    {% set found.status = ae.status %}
+                                {% endif %}
+                            {% endfor %}
+                            {% if found.status == 'running' %}
+                            <span class="inline-block w-2.5 h-2.5 rounded-full bg-green-400" title="Running"></span>
+                            {% elif found.status == 'installed' %}
+                            <span class="inline-block w-2.5 h-2.5 rounded-full bg-blue-400" title="Installed"></span>
+                            {% elif found.status == 'not_installed' %}
+                            <span class="inline-block w-2.5 h-2.5 rounded-full bg-gray-600" title="Not installed"></span>
+                            {% else %}
+                            <span class="text-kitt-dim text-xs">-</span>
+                            {% endif %}
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="flex items-center space-x-4 mt-3 text-xs text-kitt-dim">
+            <span class="flex items-center space-x-1"><span class="w-2 h-2 rounded-full bg-green-400"></span><span>Running</span></span>
+            <span class="flex items-center space-x-1"><span class="w-2 h-2 rounded-full bg-blue-400"></span><span>Installed</span></span>
+            <span class="flex items-center space-x-1"><span class="w-2 h-2 rounded-full bg-gray-600"></span><span>Not installed</span></span>
+        </div>
+        {% else %}
+        <p class="text-kitt-dim text-sm">No agents registered. <a href="/agents/add" class="text-kitt-accent hover:underline">Add an agent</a> to see engine status.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

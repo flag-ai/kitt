@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}KITT - Compare Results{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <div>
+        <h1 class="text-2xl font-bold">Compare Results</h1>
+        <p class="text-kitt-dim text-sm mt-1">Side-by-side comparison of benchmark results</p>
+    </div>
+
+    {% if results %}
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm bg-kitt-surface rounded-lg">
+            <thead>
+                <tr class="text-kitt-dim text-left bg-kitt-primary/50">
+                    <th class="px-4 py-3 font-medium">Property</th>
+                    {% for r in results %}
+                    <th class="px-4 py-3 font-medium">{{ r.get('model', 'Unknown')[:30] }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-kitt-primary/20">
+                <tr class="hover:bg-kitt-bg/30">
+                    <td class="px-4 py-3 text-kitt-dim">Engine</td>
+                    {% for r in results %}<td class="px-4 py-3">{{ r.get('engine', '') }}</td>{% endfor %}
+                </tr>
+                <tr class="hover:bg-kitt-bg/30">
+                    <td class="px-4 py-3 text-kitt-dim">Suite</td>
+                    {% for r in results %}<td class="px-4 py-3">{{ r.get('suite_name', '') }}</td>{% endfor %}
+                </tr>
+                <tr class="hover:bg-kitt-bg/30">
+                    <td class="px-4 py-3 text-kitt-dim">Status</td>
+                    {% for r in results %}
+                    <td class="px-4 py-3">
+                        {% if r.get('passed') %}<span class="text-green-400">PASS</span>{% else %}<span class="text-red-400">FAIL</span>{% endif %}
+                    </td>
+                    {% endfor %}
+                </tr>
+                <tr class="hover:bg-kitt-bg/30">
+                    <td class="px-4 py-3 text-kitt-dim">Total Time</td>
+                    {% for r in results %}<td class="px-4 py-3">{{ "%.1f"|format(r.get('total_time_seconds', 0)) }}s</td>{% endfor %}
+                </tr>
+                <tr class="hover:bg-kitt-bg/30">
+                    <td class="px-4 py-3 text-kitt-dim">Benchmarks</td>
+                    {% for r in results %}<td class="px-4 py-3">{{ r.get('passed_count', 0) }}/{{ r.get('total_benchmarks', 0) }}</td>{% endfor %}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="bg-kitt-surface rounded-lg p-12 text-center">
+        <p class="text-kitt-dim mb-4">Select results to compare.</p>
+        <p class="text-kitt-dim text-sm">Use the Results page to find results, then add their IDs as query parameters:
+            <code class="bg-kitt-bg px-1 rounded">/results/compare?id=abc&id=def</code></p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,40 @@
+name: example_custom
+version: "1.0.0"
+category: quality_custom
+description: "Example custom benchmark - demonstrates how to create your own tests"
+
+warmup:
+  enabled: true
+  iterations: 3
+  log_warmup_times: true
+
+# Local dataset - place your test files in this directory
+dataset:
+  local_path: ./datasets/custom/
+  sample_size: 10
+
+# Prompt template with {question} placeholder
+prompts:
+  template: |
+    Answer the following question concisely.
+
+    Question: {question}
+    Answer:
+
+sampling:
+  temperature: 0.0
+  max_tokens: 256
+
+evaluation:
+  metrics:
+    - accuracy
+
+runs: 1
+
+# To create your own custom benchmark:
+# 1. Copy this file to configs/tests/quality/custom/your_test.yaml
+# 2. Set name, category, and description
+# 3. Configure dataset (HuggingFace source or local_path)
+# 4. Customize the prompt template
+# 5. Run: kitt test list (to verify it loads)
+# 6. Run: kitt run --model <model> --engine <engine> --suite custom_suite

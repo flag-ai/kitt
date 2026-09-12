@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block title %}KITT - Campaigns{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-2xl font-bold">Campaigns</h1>
+            <p class="text-kitt-dim text-sm mt-1">Benchmark campaign management</p>
+        </div>
+        <a href="/campaigns/create" class="bg-kitt-accent hover:bg-kitt-accent/80 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">
+            New Campaign
+        </a>
+    </div>
+
+    <!-- Status filter chips -->
+    <div class="flex gap-2">
+        {% set statuses = ['', 'draft', 'queued', 'running', 'completed', 'failed', 'cancelled'] %}
+        {% for s in statuses %}
+        <a href="/campaigns{% if s %}?status={{ s }}{% endif %}"
+           class="px-3 py-1 rounded-full text-xs font-medium transition-colors
+                  {% if current_status == s %}bg-kitt-accent text-white
+                  {% else %}bg-kitt-surface text-kitt-dim hover:text-white{% endif %}">
+            {{ s if s else 'All' }}
+        </a>
+        {% endfor %}
+    </div>
+
+    {% if campaigns %}
+    <div class="bg-kitt-surface rounded-lg overflow-hidden">
+        <table class="w-full text-sm">
+            <thead>
+                <tr class="text-kitt-dim text-left bg-kitt-primary/50">
+                    <th class="px-4 py-3 font-medium">Name</th>
+                    <th class="px-4 py-3 font-medium">Status</th>
+                    <th class="px-4 py-3 font-medium">Runs</th>
+                    <th class="px-4 py-3 font-medium">Created</th>
+                    <th class="px-4 py-3 font-medium">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-kitt-primary/20">
+                {% for c in campaigns %}
+                <tr class="hover:bg-kitt-bg/30">
+                    <td class="px-4 py-3">
+                        <a href="/campaigns/{{ c.id }}" class="font-medium hover:text-kitt-accent">{{ c.name }}</a>
+                        {% if c.description %}
+                        <p class="text-xs text-kitt-dim mt-0.5">{{ c.description[:80] }}</p>
+                        {% endif %}
+                    </td>
+                    <td class="px-4 py-3">
+                        <span class="text-xs px-2 py-0.5 rounded
+                              {% if c.status == 'running' %}bg-blue-900/50 text-blue-300
+                              {% elif c.status == 'completed' %}bg-green-900/50 text-green-300
+                              {% elif c.status == 'failed' %}bg-red-900/50 text-red-300
+                              {% elif c.status == 'queued' %}bg-yellow-900/50 text-yellow-300
+                              {% else %}bg-gray-800 text-gray-400{% endif %}">
+                            {{ c.status }}
+                        </span>
+                    </td>
+                    <td class="px-4 py-3 text-kitt-dim">
+                        {{ c.succeeded or 0 }}/{{ c.total_runs or 0 }}
+                        {% if c.failed %}<span class="text-red-400 ml-1">({{ c.failed }} failed)</span>{% endif %}
+                    </td>
+                    <td class="px-4 py-3 text-kitt-dim text-xs">{{ c.created_at[:19] if c.created_at else '-' }}</td>
+                    <td class="px-4 py-3">
+                        <a href="/campaigns/{{ c.id }}" class="text-kitt-accent hover:underline text-xs">View</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    {% if pages > 1 %}
+    <div class="flex justify-center gap-2">
+        {% for p in range(1, pages + 1) %}
+        <a href="/campaigns?page={{ p }}{% if current_status %}&status={{ current_status }}{% endif %}"
+           class="px-3 py-1 rounded text-sm
+                  {% if page == p %}bg-kitt-accent text-white{% else %}bg-kitt-surface text-kitt-dim hover:text-white{% endif %}">
+            {{ p }}
+        </a>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% else %}
+    <div class="bg-kitt-surface rounded-lg p-12 text-center">
+        <p class="text-kitt-dim mb-4">No campaigns yet.</p>
+        <a href="/campaigns/create" class="text-kitt-accent hover:underline">Create your first campaign</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

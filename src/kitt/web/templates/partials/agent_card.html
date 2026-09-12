@@ -1,0 +1,19 @@
+{% for agent in agents %}
+<div class="flex items-center justify-between bg-kitt-bg/50 rounded-md p-3">
+    <div class="flex items-center space-x-3">
+        <span class="w-2.5 h-2.5 rounded-full
+              {% if agent.status == 'online' %}bg-green-400
+              {% elif agent.status == 'busy' %}bg-yellow-400
+              {% else %}bg-gray-500{% endif %}"></span>
+        <div>
+            <a href="/agents/{{ agent.id }}" class="text-sm font-medium hover:text-kitt-accent">{{ agent.name }}</a>
+            <div class="text-xs text-kitt-dim">{{ agent.hostname }}:{{ agent.port }}</div>
+        </div>
+    </div>
+    <div class="text-xs">
+        {% if agent.gpu_info %}
+        <span class="bg-kitt-primary/50 px-2 py-0.5 rounded">{{ agent.gpu_info }}</span>
+        {% endif %}
+    </div>
+</div>
+{% endfor %}

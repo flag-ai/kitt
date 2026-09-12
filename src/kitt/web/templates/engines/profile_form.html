@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}KITT - {{ 'Edit' if profile else 'New' }} Engine Profile{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto space-y-6">
+    <div class="flex items-center justify-between">
+        <h1 class="text-2xl font-bold">{{ 'Edit' if profile else 'New' }} Engine Profile</h1>
+        <a href="/engines" class="text-kitt-dim hover:text-white text-sm">Back to Engines</a>
+    </div>
+
+    <form action="{{ '/engines/profiles/' + profile.id if profile else '/engines/profiles' }}"
+          method="POST" class="bg-kitt-surface rounded-lg p-6 space-y-5">
+
+        <div>
+            <label class="block text-sm font-medium mb-1">Name</label>
+            <input type="text" name="name" value="{{ profile.name if profile else '' }}"
+                   class="w-full bg-kitt-bg border border-kitt-primary/30 rounded px-3 py-2 text-sm focus:outline-none focus:border-kitt-accent"
+                   placeholder="e.g. llama-cpp-fp16-spark" required>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <label class="block text-sm font-medium mb-1">Engine</label>
+                <select name="engine"
+                        class="w-full bg-kitt-bg border border-kitt-primary/30 rounded px-3 py-2 text-sm focus:outline-none focus:border-kitt-accent"
+                        required>
+                    <option value="">Select engine</option>
+                    {% for engine in registry %}
+                    <option value="{{ engine.name }}"
+                            {% if profile and profile.engine == engine.name %}selected{% endif %}>
+                        {{ engine.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-1">Mode</label>
+                <select name="mode"
+                        class="w-full bg-kitt-bg border border-kitt-primary/30 rounded px-3 py-2 text-sm focus:outline-none focus:border-kitt-accent">
+                    <option value="docker" {% if not profile or profile.mode == 'docker' %}selected{% endif %}>Docker</option>
+                    <option value="native" {% if profile and profile.mode == 'native' %}selected{% endif %}>Native</option>
+                </select>
+            </div>
+        </div>
+
+        <div>
+            <label class="block text-sm font-medium mb-1">Description</label>
+            <input type="text" name="description" value="{{ profile.description if profile else '' }}"
+                   class="w-full bg-kitt-bg border border-kitt-primary/30 rounded px-3 py-2 text-sm focus:outline-none focus:border-kitt-accent"
+                   placeholder="Optional description">
+        </div>
+
+        <div>
+            <label class="block text-sm font-medium mb-1">Build Config <span class="text-kitt-dim font-normal">(JSON, native mode only)</span></label>
+            <textarea name="build_config" rows="4"
+                      class="w-full bg-kitt-bg border border-kitt-primary/30 rounded px-3 py-2 text-sm font-mono focus:outline-none focus:border-kitt-accent"
+                      placeholder='{"cuda_architectures": "121"}'>{% if profile and profile.build_config %}{{ profile.build_config | tojson(indent=2) }}{% endif %}</textarea>
+        </div>
+
+        <div>
+            <label class="block text-sm font-medium mb-1">Runtime Config <span class="text-kitt-dim font-normal">(JSON)</span></label>
+            <textarea name="runtime_config" rows="4"
+                      class="w-full bg-kitt-bg border border-kitt-primary/30 rounded px-3 py-2 text-sm font-mono focus:outline-none focus:border-kitt-accent"
+                      placeholder='{"n_gpu_layers": -1, "n_ctx": 8192}'>{% if profile and profile.runtime_config %}{{ profile.runtime_config | tojson(indent=2) }}{% endif %}</textarea>
+        </div>
+
+        <div class="flex items-center space-x-3 pt-2">
+            <button type="submit"
+                    class="px-4 py-2 bg-kitt-accent text-white rounded-md hover:bg-kitt-accent/80 text-sm font-medium">
+                {{ 'Update' if profile else 'Create' }} Profile
+            </button>
+            <a href="/engines" class="px-4 py-2 text-kitt-dim hover:text-white text-sm">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

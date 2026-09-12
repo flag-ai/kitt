@@ -1,0 +1,30 @@
+suite_name: standard_benchmarks
+version: "1.1.0"
+description: "Standard academic benchmarks for LLM evaluation (V1)"
+
+tests:
+  # Quality tests
+  - mmlu
+  - gsm8k
+  - truthfulqa
+  - hellaswag
+
+  # Performance tests
+  - throughput
+  - latency
+  - memory_usage
+  - warmup_analysis
+
+global_config:
+  runs: 3
+
+sampling_overrides:
+  temperature: 0.0
+  max_tokens: 2048
+
+test_overrides:
+  mmlu:
+    runs: 1
+  warmup_analysis:
+    warmup:
+      enabled: false

@@ -1,9 +1,29 @@
-# Go build artifacts
-/kitt
-*.exe
-*.test
-*.out
-coverage.*
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+.venv/
+env/
+venv/
 
 # IDE
 .vscode/
@@ -12,25 +32,33 @@ coverage.*
 *.swo
 *~
 
+# Testing
+.pytest_cache/
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+
+# Distribution
+*.tar.gz
+*.whl
+
 # OS
 .DS_Store
 Thumbs.db
 
-# KITT local runtime
+# KITT specific
 .kitt/
 .claude/
-.env
+checkpoints/
+kitt-results/
+campaign.log
+campaign_output.log
+campaign_state.json
+rerun-failures*.log
 
-# Web
-web/node_modules/
-web/dist/
+# MkDocs
+site/
 
-# Benchmark smoke-test scratch
-/tmp-smoke-benchmarks/
-benchmarks-reference/tools/__pycache__/
-benchmarks-reference/**/__pycache__/
-
-# Python virtualenvs used by smoke harness — accidentally created
-# locally should never be committed.
-.venv/
-venv/
+# pyenv
+.python-version

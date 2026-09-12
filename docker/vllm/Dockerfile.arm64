@@ -1,0 +1,40 @@
+# KITT-managed Dockerfile for vLLM on ARM64 + Blackwell CUDA
+#
+# Extends the NGC vLLM container with updated Transformers to support
+# newer model architectures that require a newer Transformers version
+# than what ships with the NGC image.
+#
+# The NGC base image provides proper Blackwell (sm_120/sm_121) CUDA support,
+# Triton, and the full vLLM stack.  This layer patches Transformers.
+#
+# LIMITATION: Upgrading Transformers enables model config parsing, but
+# vLLM must also have an inference implementation for the model arch.
+# For example, Qwen3.5 (qwen3_5) requires both transformers>=5.1 AND
+# a vLLM version with Qwen3_5ForConditionalGeneration support.  As of
+# NGC 26.01 (vLLM 0.13.0), only Qwen3 and earlier are supported.
+# Check NGC release notes for when Qwen3.5 inference is added.
+#
+# Build: docker build -f docker/vllm/Dockerfile.arm64 \
+#          -t kitt/vllm:arm64 .
+# Run:   docker run --gpus all --network host kitt/vllm:arm64 ...
+
+ARG BASE_IMAGE=nvcr.io/nvidia/vllm:26.01-py3
+
+FROM ${BASE_IMAGE}
+
+# Upgrade Transformers to enable newer model architectures.
+# NGC 26.01 ships transformers==4.57.1.
+RUN pip install --no-cache-dir "transformers>=5.1" && \
+    python -c "import transformers; print(f'Transformers {transformers.__version__}')"
+
+# Compatibility shim: transformers 5.x renamed ALLOWED_LAYER_TYPES to
+# ALLOWED_MLP_LAYER_TYPES in configuration_utils.  vLLM 0.13.0 imports
+# the old name.  Append an alias so both names work.
+RUN CONF_UTILS=$(python -c "import transformers.configuration_utils as m; print(m.__file__)") && \
+    echo "" >> "$CONF_UTILS" && \
+    echo "# Compat shim for vLLM 0.13.x (ALLOWED_LAYER_TYPES renamed in transformers 5.x)" >> "$CONF_UTILS" && \
+    echo "try:" >> "$CONF_UTILS" && \
+    echo "    ALLOWED_LAYER_TYPES = ALLOWED_MLP_LAYER_TYPES" >> "$CONF_UTILS" && \
+    echo "except NameError:" >> "$CONF_UTILS" && \
+    echo "    pass" >> "$CONF_UTILS" && \
+    python -c "from transformers.configuration_utils import ALLOWED_LAYER_TYPES; print('Shim verified OK')"

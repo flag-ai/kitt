@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block title %}KITT - Results{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <div>
+        <h1 class="text-2xl font-bold">Results</h1>
+        <p class="text-kitt-dim text-sm mt-1">Browse and compare benchmark results</p>
+    </div>
+
+    <!-- Filters -->
+    <div class="bg-kitt-surface rounded-lg p-4 flex flex-wrap gap-4 items-end">
+        <div>
+            <label class="block text-xs text-kitt-dim mb-1">Model</label>
+            <select onchange="updateFilter('model', this.value)"
+                    class="bg-kitt-bg border border-kitt-primary/50 rounded-md px-3 py-1.5 text-sm">
+                <option value="">All Models</option>
+                {% for m in models %}
+                <option value="{{ m.get('model', m) }}" {% if filter_model == m.get('model', m) %}selected{% endif %}>{{ m.get('model', m) }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label class="block text-xs text-kitt-dim mb-1">Engine</label>
+            <select onchange="updateFilter('engine', this.value)"
+                    class="bg-kitt-bg border border-kitt-primary/50 rounded-md px-3 py-1.5 text-sm">
+                <option value="">All Engines</option>
+                {% for e in engines %}
+                <option value="{{ e.get('engine', e) }}" {% if filter_engine == e.get('engine', e) %}selected{% endif %}>{{ e.get('engine', e) }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <a href="/results/compare" class="text-kitt-accent hover:underline text-sm ml-auto">Compare Results</a>
+    </div>
+
+    {% if results %}
+    <div class="bg-kitt-surface rounded-lg overflow-hidden">
+        <table class="w-full text-sm">
+            <thead>
+                <tr class="text-kitt-dim text-left bg-kitt-primary/50">
+                    <th class="px-4 py-3 font-medium">Model</th>
+                    <th class="px-4 py-3 font-medium">Engine</th>
+                    <th class="px-4 py-3 font-medium">Suite</th>
+                    <th class="px-4 py-3 font-medium">Status</th>
+                    <th class="px-4 py-3 font-medium">Benchmarks</th>
+                    <th class="px-4 py-3 font-medium">Time</th>
+                    <th class="px-4 py-3 font-medium">Timestamp</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-kitt-primary/20">
+                {% for r in results %}
+                <tr class="hover:bg-kitt-bg/30 cursor-pointer"
+                    onclick="window.location='/results/{{ r.get('id', loop.index0) }}'">
+                    <td class="px-4 py-3">{{ r.get('model', '') }}</td>
+                    <td class="px-4 py-3">{{ r.get('engine', '') }}</td>
+                    <td class="px-4 py-3">{{ r.get('suite_name', '') }}</td>
+                    <td class="px-4 py-3">
+                        {% if r.get('passed') %}
+                        <span class="text-green-400 font-medium">PASS</span>
+                        {% else %}
+                        <span class="text-red-400 font-medium">FAIL</span>
+                        {% endif %}
+                    </td>
+                    <td class="px-4 py-3 text-kitt-dim">{{ r.get('passed_count', 0) }}/{{ r.get('total_benchmarks', 0) }}</td>
+                    <td class="px-4 py-3 text-kitt-dim">{{ "%.1f"|format(r.get('total_time_seconds', 0)) }}s</td>
+                    <td class="px-4 py-3 text-kitt-dim text-xs">{{ r.get('timestamp', '')[:19] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    {% if pages > 1 %}
+    <div class="flex justify-center gap-2">
+        {% for p in range(1, pages + 1) %}
+        <a href="/results?page={{ p }}{% if filter_model %}&model={{ filter_model }}{% endif %}{% if filter_engine %}&engine={{ filter_engine }}{% endif %}"
+           class="px-3 py-1 rounded text-sm
+                  {% if page == p %}bg-kitt-accent text-white{% else %}bg-kitt-surface text-kitt-dim hover:text-white{% endif %}">
+            {{ p }}
+        </a>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% else %}
+    <div class="bg-kitt-surface rounded-lg p-12 text-center">
+        <p class="text-kitt-dim mb-4">No results found.</p>
+        <p class="text-kitt-dim text-sm">Run benchmarks with <code class="bg-kitt-bg px-1 rounded">kitt run</code> to generate results.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function updateFilter(key, value) {
+    const params = new URLSearchParams(window.location.search);
+    if (value) params.set(key, value);
+    else params.delete(key);
+    params.delete('page');
+    window.location.search = params.toString();
+}
+</script>
+{% endblock %}

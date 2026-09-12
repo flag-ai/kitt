@@ -1,0 +1,48 @@
+name: mmlu
+version: "1.0.0"
+category: quality_standard
+description: "Massive Multitask Language Understanding - 57 subjects across STEM, humanities, social sciences"
+
+warmup:
+  enabled: true
+  iterations: 5
+  log_warmup_times: true
+
+dataset:
+  source: cais/mmlu
+  split: test
+  sample_size: null  # null = use all samples
+
+prompts:
+  template: |
+    The following are multiple choice questions (with answers) about {subject}.
+
+    Question: {question}
+    A. {choices[0]}
+    B. {choices[1]}
+    C. {choices[2]}
+    D. {choices[3]}
+    Answer:
+
+  few_shot: 5
+  few_shot_source: dev
+
+sampling:
+  temperature: 0.0
+  top_p: 1.0
+  max_tokens: 10
+
+evaluation:
+  metrics:
+    - accuracy
+    - exact_match
+    - per_subject_accuracy
+
+  answer_extraction:
+    method: first_letter
+    fallback: random
+
+runs: 3
+
+performance_collection:
+  frequency: start_end

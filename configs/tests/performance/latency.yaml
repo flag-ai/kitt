@@ -1,0 +1,21 @@
+name: latency
+version: "1.0.0"
+category: performance
+description: "Measure per-request latency and time to first token"
+
+warmup:
+  enabled: true
+  iterations: 5
+
+test_config:
+  iterations: 20
+  prompts:
+    - "Hello"
+    - "What is 2+2?"
+    - "Translate 'hello' to French."
+
+sampling:
+  temperature: 0.0
+  max_tokens: 50
+
+runs: 3

@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %}KITT - Result Detail{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-2xl font-bold">{{ result.get('model', 'Unknown Model') }}</h1>
+            <p class="text-kitt-dim text-sm mt-1">{{ result.get('engine', '') }} &middot; {{ result.get('suite_name', '') }} &middot; {{ result.get('timestamp', '')[:19] }}</p>
+        </div>
+        <div class="flex items-center space-x-3">
+            {% if result.get('passed') %}
+            <span class="bg-green-900/50 text-green-300 px-3 py-1 rounded-full text-sm">PASS</span>
+            {% else %}
+            <span class="bg-red-900/50 text-red-300 px-3 py-1 rounded-full text-sm">FAIL</span>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Summary stats -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div class="bg-kitt-surface rounded-lg p-4 text-center">
+            <div class="text-2xl font-bold">{{ result.get('total_benchmarks', 0) }}</div>
+            <div class="text-kitt-dim text-xs">Total Benchmarks</div>
+        </div>
+        <div class="bg-kitt-surface rounded-lg p-4 text-center">
+            <div class="text-2xl font-bold text-green-400">{{ result.get('passed_count', 0) }}</div>
+            <div class="text-kitt-dim text-xs">Passed</div>
+        </div>
+        <div class="bg-kitt-surface rounded-lg p-4 text-center">
+            <div class="text-2xl font-bold text-red-400">{{ result.get('failed_count', 0) }}</div>
+            <div class="text-kitt-dim text-xs">Failed</div>
+        </div>
+        <div class="bg-kitt-surface rounded-lg p-4 text-center">
+            <div class="text-2xl font-bold">{{ "%.1f"|format(result.get('total_time_seconds', 0)) }}s</div>
+            <div class="text-kitt-dim text-xs">Total Time</div>
+        </div>
+    </div>
+
+    <!-- Benchmark breakdown -->
+    {% if result.get('results') %}
+    <div class="bg-kitt-surface rounded-lg overflow-hidden">
+        <table class="w-full text-sm">
+            <thead>
+                <tr class="text-kitt-dim text-left bg-kitt-primary/50">
+                    <th class="px-4 py-3 font-medium">Benchmark</th>
+                    <th class="px-4 py-3 font-medium">Run</th>
+                    <th class="px-4 py-3 font-medium">Status</th>
+                    <th class="px-4 py-3 font-medium">Key Metrics</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-kitt-primary/20">
+                {% for bench in result.get('results', []) %}
+                <tr class="hover:bg-kitt-bg/30">
+                    <td class="px-4 py-3 font-medium">{{ bench.get('test_name', '') }}</td>
+                    <td class="px-4 py-3 text-kitt-dim">{{ bench.get('run_number', 1) }}</td>
+                    <td class="px-4 py-3">
+                        {% if bench.get('passed') %}
+                        <span class="text-green-400">PASS</span>
+                        {% else %}
+                        <span class="text-red-400">FAIL</span>
+                        {% endif %}
+                    </td>
+                    <td class="px-4 py-3">
+                        <div class="flex flex-wrap gap-1.5">
+                        {% for k, v in bench.get('metrics', {}).items() %}
+                            {% if v is number %}
+                            <span class="bg-kitt-primary/50 px-2 py-0.5 rounded text-xs">{{ k }}: {{ "%.2f"|format(v) }}</span>
+                            {% endif %}
+                        {% endfor %}
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
+    <!-- System info -->
+    {% if result.get('system_info') %}
+    <div class="bg-kitt-surface rounded-lg p-5">
+        <h2 class="text-lg font-semibold mb-3">System Info</h2>
+        <pre class="bg-kitt-bg rounded-md p-4 text-sm overflow-x-auto text-kitt-dim">{{ result.system_info | tojson(indent=2) }}</pre>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

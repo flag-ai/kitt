@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+{% block title %}KITT - Dashboard{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <!-- Header -->
+    <div>
+        <h1 class="text-2xl font-bold">Dashboard</h1>
+        <p class="text-kitt-dim text-sm mt-1">KITT Benchmarking Platform Overview</p>
+    </div>
+
+    <!-- Stats cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-kitt-surface rounded-lg p-5 border-l-4 border-kitt-accent">
+            <div class="text-3xl font-bold text-kitt-accent">{{ summary.total_results }}</div>
+            <div class="text-kitt-dim text-sm mt-1">Total Results</div>
+        </div>
+        <div class="bg-kitt-surface rounded-lg p-5 border-l-4 border-green-500">
+            <div class="text-3xl font-bold text-green-400">{{ summary.pass_rate }}%</div>
+            <div class="text-kitt-dim text-sm mt-1">Pass Rate</div>
+        </div>
+        <div class="bg-kitt-surface rounded-lg p-5 border-l-4 border-blue-500">
+            <div class="text-3xl font-bold text-blue-400">{{ summary.engine_count }}</div>
+            <div class="text-kitt-dim text-sm mt-1">Engines</div>
+        </div>
+        <div class="bg-kitt-surface rounded-lg p-5 border-l-4 border-purple-500">
+            <div class="text-3xl font-bold text-purple-400">{{ summary.model_count }}</div>
+            <div class="text-kitt-dim text-sm mt-1">Models</div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Active agents panel -->
+        <div class="bg-kitt-surface rounded-lg p-5"
+             hx-get="/partials/agent_cards" hx-trigger="every 5s" hx-swap="innerHTML">
+            <h2 class="text-lg font-semibold mb-4">Agents</h2>
+            {% if agents %}
+            <div class="space-y-3">
+                {% for agent in agents %}
+                <div class="flex items-center justify-between bg-kitt-bg/50 rounded-md p-3">
+                    <div class="flex items-center space-x-3">
+                        <span class="w-2.5 h-2.5 rounded-full
+                              {% if agent.status == 'online' %}bg-green-400
+                              {% elif agent.status == 'busy' %}bg-yellow-400
+                              {% else %}bg-gray-500{% endif %}"></span>
+                        <div>
+                            <a href="/agents/{{ agent.id }}" class="text-sm font-medium hover:text-kitt-accent">{{ agent.name }}</a>
+                            <div class="text-xs text-kitt-dim">{{ agent.hostname }}:{{ agent.port }}</div>
+                        </div>
+                    </div>
+                    <div class="text-xs">
+                        {% if agent.gpu_info %}
+                        <span class="bg-kitt-primary/50 px-2 py-0.5 rounded">{{ agent.gpu_info }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="text-kitt-dim text-sm">No agents registered. <a href="/agents/add" class="text-kitt-accent hover:underline">Add one</a></p>
+            {% endif %}
+        </div>
+
+        <!-- Active campaigns panel -->
+        <div class="bg-kitt-surface rounded-lg p-5"
+             hx-get="/partials/campaign_rows" hx-trigger="every 3s" hx-swap="innerHTML">
+            <h2 class="text-lg font-semibold mb-4">Campaigns</h2>
+            {% if campaigns %}
+            <div class="space-y-3">
+                {% for c in campaigns %}
+                <div class="bg-kitt-bg/50 rounded-md p-3">
+                    <div class="flex items-center justify-between">
+                        <a href="/campaigns/{{ c.id }}" class="text-sm font-medium hover:text-kitt-accent">{{ c.name }}</a>
+                        <span class="text-xs px-2 py-0.5 rounded
+                              {% if c.status == 'running' %}bg-blue-900/50 text-blue-300
+                              {% elif c.status == 'completed' %}bg-green-900/50 text-green-300
+                              {% elif c.status == 'failed' %}bg-red-900/50 text-red-300
+                              {% else %}bg-gray-800 text-gray-400{% endif %}">
+                            {{ c.status }}
+                        </span>
+                    </div>
+                    {% if c.total_runs > 0 %}
+                    <div class="mt-2 flex items-center space-x-4 text-xs text-kitt-dim">
+                        <span>{{ c.succeeded }}/{{ c.total_runs }} passed</span>
+                        {% if c.failed > 0 %}<span class="text-red-400">{{ c.failed }} failed</span>{% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="text-kitt-dim text-sm">No campaigns yet. <a href="/campaigns/create" class="text-kitt-accent hover:underline">Create one</a></p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Recent results -->
+    <div class="bg-kitt-surface rounded-lg p-5">
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-semibold">Recent Results</h2>
+            <a href="/results" class="text-sm text-kitt-accent hover:underline">View all</a>
+        </div>
+        {% if recent_results %}
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead>
+                    <tr class="text-kitt-dim text-left border-b border-kitt-primary/30">
+                        <th class="pb-2 font-medium">Model</th>
+                        <th class="pb-2 font-medium">Engine</th>
+                        <th class="pb-2 font-medium">Suite</th>
+                        <th class="pb-2 font-medium">Status</th>
+                        <th class="pb-2 font-medium">Time</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-kitt-primary/20">
+                    {% for r in recent_results %}
+                    <tr class="hover:bg-kitt-bg/30">
+                        <td class="py-2.5">{{ r.get('model', '') }}</td>
+                        <td class="py-2.5">{{ r.get('engine', '') }}</td>
+                        <td class="py-2.5">{{ r.get('suite_name', '') }}</td>
+                        <td class="py-2.5">
+                            {% if r.get('passed') %}
+                            <span class="text-green-400 font-medium">PASS</span>
+                            {% else %}
+                            <span class="text-red-400 font-medium">FAIL</span>
+                            {% endif %}
+                        </td>
+                        <td class="py-2.5 text-kitt-dim">{{ "%.1f"|format(r.get('total_time_seconds', 0)) }}s</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-kitt-dim text-sm">No results yet. Run benchmarks with <code class="bg-kitt-bg px-1 rounded">kitt run</code> to generate results.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

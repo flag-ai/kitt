@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Campaign - KITT{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto">
+    <div class="flex items-center justify-between mb-6">
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Edit Campaign</h1>
+        <a href="{{ url_for('campaigns.detail', campaign_id=campaign.id) }}"
+           class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">
+            Cancel
+        </a>
+    </div>
+
+    <form method="POST" action="{{ url_for('api_campaigns.update_config', campaign_id=campaign.id) }}"
+          class="space-y-6">
+        <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6 space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Campaign Name
+                </label>
+                <input type="text" name="name" value="{{ campaign.name }}"
+                       class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Description
+                </label>
+                <textarea name="description" rows="3"
+                          class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500">{{ campaign.description or '' }}</textarea>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Configuration (JSON)
+                </label>
+                <textarea name="config" rows="12"
+                          class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 font-mono text-sm">{{ campaign.config_json | tojson(indent=2) if campaign.config_json else '{}' }}</textarea>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Agent
+                </label>
+                <select name="agent_id"
+                        class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    <option value="">No agent assigned</option>
+                    {% for agent in agents %}
+                    <option value="{{ agent.id }}" {% if agent.id == campaign.agent_id %}selected{% endif %}>
+                        {{ agent.name }} ({{ agent.status }})
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="flex justify-end space-x-3">
+            <a href="{{ url_for('campaigns.detail', campaign_id=campaign.id) }}"
+               class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">
+                Cancel
+            </a>
+            <button type="submit"
+                    class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                Save Changes
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

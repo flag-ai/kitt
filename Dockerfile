@@ -1,33 +1,35 @@
-# Stage 1: Build frontend.
-FROM node:22-alpine AS web-builder
-WORKDIR /app/web
-COPY web/package*.json ./
-RUN npm ci
-COPY web/ ./
-RUN npm run build
+FROM python:3.12-slim
 
-# Stage 2: Build Go binary.
-FROM golang:1.25-alpine AS go-builder
-RUN apk add --no-cache gcc musl-dev
+# Install system deps for psutil/pynvml compilation
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc python3-dev curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Docker CLI (static binary — works on both amd64 and arm64)
+RUN ARCH=$(uname -m) && \
+    if [ "$ARCH" = "x86_64" ]; then DOCKER_ARCH=x86_64; \
+    elif [ "$ARCH" = "aarch64" ]; then DOCKER_ARCH=aarch64; \
+    else DOCKER_ARCH=$ARCH; fi && \
+    curl -fsSL "https://download.docker.com/linux/static/stable/${DOCKER_ARCH}/docker-27.5.1.tgz" \
+    | tar xz --strip-components=1 -C /usr/local/bin docker/docker
+
 WORKDIR /app
-COPY go.mod go.sum ./
-RUN go mod download
-COPY . .
-COPY --from=web-builder /app/web/dist ./web/dist
-ARG VERSION=dev
-ARG COMMIT=unknown
-ARG BUILD_DATE=unknown
-RUN CGO_ENABLED=0 go build -ldflags "\
-  -X github.com/flag-ai/commons/version.Version=${VERSION} \
-  -X github.com/flag-ai/commons/version.Commit=${COMMIT} \
-  -X github.com/flag-ai/commons/version.Date=${BUILD_DATE}" \
-  -o /kitt ./cmd/kitt
 
-# Stage 3: Final image.
-FROM alpine:3.21
-RUN apk add --no-cache ca-certificates tzdata
-COPY --from=go-builder /kitt /usr/local/bin/kitt
-COPY --from=go-builder /app/migrations /migrations
-EXPOSE 8080
+# Configure Poetry to create venv in-project so the path is predictable
+ENV POETRY_VIRTUALENVS_IN_PROJECT=1
+
+# Install poetry and project dependencies
+COPY pyproject.toml poetry.lock ./
+RUN pip install poetry && poetry install --no-root --without dev --extras web --extras devon \
+    && poetry run pip install build
+
+COPY README.md ./
+COPY src/ ./src/
+COPY configs/ ./configs/
+COPY agent-package/ ./agent-package/
+RUN poetry install --only-root --extras web --extras devon
+
+# Expose the venv bin so "kitt" is callable without "poetry run"
+ENV PATH="/app/.venv/bin:$PATH"
+
 ENTRYPOINT ["kitt"]
-CMD ["serve"]

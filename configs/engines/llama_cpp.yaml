@@ -1,0 +1,6 @@
+name: llama_cpp
+parameters:
+  n_ctx: 4096
+  n_gpu_layers: -1  # -1 = offload all layers to GPU
+  n_threads: null    # null = auto-detect
+  verbose: false

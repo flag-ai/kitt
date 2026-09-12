@@ -1,0 +1,13 @@
+suite_name: quick
+version: "1.0.0"
+description: "Quick smoke test - runs throughput benchmark only"
+
+tests:
+  - throughput
+
+global_config:
+  runs: 1
+
+sampling_overrides:
+  temperature: 0.0
+  max_tokens: 128
