@@ -152,7 +152,7 @@ src/kitt/
 ├── runners/       # Suite/single test runners + checkpoint recovery
 ├── collectors/    # GPU memory tracking, system metrics
 ├── reporters/     # JSON, Markdown, comparison output
-├── git_ops/       # KARR legacy Git-backed storage
+├── git_ops/       # Legacy git-backed result store (Gen 2)
 ├── monitoring/    # Monitoring stack config, generator, deployer
 ├── stack/         # Composable Docker stack config + generator
 ├── security/      # TLS cert generation and config

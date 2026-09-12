@@ -98,7 +98,7 @@ nav:
       - concepts/index.md
       - Architecture: concepts/architecture.md
       - Hardware Fingerprinting: concepts/hardware-fingerprinting.md
-      - Results Storage: concepts/karr.md
+      - Results Storage: concepts/results-storage.md
       - Engine Lifecycle: concepts/engine-lifecycle.md
       - Benchmark System: concepts/benchmark-system.md
       - Security & mTLS: concepts/security.md

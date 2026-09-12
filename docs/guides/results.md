@@ -1,6 +1,6 @@
-# Results & KARR
+# Results Storage
 
-KARR (Kitt's AI Results Repository) persists all benchmark results. The
+Results storage persists all benchmark results. The
 current backend is a relational database (SQLite by default, PostgreSQL for
 production). Flat JSON files are still written for convenience, and the legacy
 Git-backed backend remains available.
@@ -21,7 +21,7 @@ flags are needed.
 
 ### Import Existing JSON Results
 
-Bring previously exported or flat-file results into KARR:
+Bring previously exported or flat-file results into results storage:
 
 ```bash
 kitt storage import ./kitt-results/run1/metrics.json
@@ -30,7 +30,7 @@ kitt storage import ./kitt-results/               # imports all runs found
 
 ### Export Results
 
-Export runs from KARR back to JSON files:
+Export runs from results storage back to JSON files:
 
 ```bash
 kitt storage export --output ./export/
@@ -39,7 +39,7 @@ kitt storage export --model llama --engine vllm --output ./export/
 
 ### List Stored Runs
 
-Browse what is stored in KARR with optional filters:
+Browse what is stored in results storage with optional filters:
 
 ```bash
 kitt storage list
@@ -50,7 +50,7 @@ Output includes run ID, model, engine, suite, timestamp, and pass/fail counts.
 
 ### Database Statistics
 
-Get a high-level summary of KARR contents:
+Get a high-level summary of results storage contents:
 
 ```bash
 kitt storage stats
@@ -135,11 +135,11 @@ and database-exported results interchangeably.
 ## Git-Backed Storage (Legacy)
 
 !!! note "Legacy Backend"
-    Git-backed KARR storage is the previous generation (Gen 2). It remains
+    The git-backed result store is the previous generation (Gen 2). It remains
     available via `--store-karr` for backward compatibility, but the database
     backend is recommended for all new deployments.
 
-The previous generation of KARR stored results in a Git repository with LFS
+The previous generation of results storage stored results in a Git repository with LFS
 tracking. To use it, add `--store-karr` to a run:
 
 ```bash
@@ -167,6 +167,6 @@ The database backend removes this friction entirely.
 
 ## Next Steps
 
-- [KARR — Results Storage](../concepts/karr.md) -- architecture and design decisions
+- [Results Storage](../concepts/results-storage.md) -- architecture and design decisions
 - [Database Schema Reference](../reference/database.md) -- full table and column documentation
 - [Hardware Fingerprinting](../concepts/hardware-fingerprinting.md) -- how system identity is captured

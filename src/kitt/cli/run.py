@@ -60,7 +60,7 @@ logger = logging.getLogger(__name__)
 @click.option(
     "--store-karr",
     is_flag=True,
-    help="Store results in KARR repository",
+    help="Also store results in the legacy git-backed result store",
 )
 @click.option(
     "--auto-pull",
@@ -282,7 +282,7 @@ def run(
         )
         console.print(f"  Outputs compressed: {len(chunk_files)} chunk(s)")
 
-    # Store in KARR repo if requested
+    # Store in the git-backed result store if requested
     if store_karr:
         _store_in_karr(output_dir, fingerprint, model_name_clean, engine, timestamp)
 
@@ -308,13 +308,15 @@ def _store_in_karr(
     engine_name: str,
     timestamp: str,
 ) -> None:
-    """Store results in a KARR repository."""
+    """Store results in the legacy git-backed result store."""
     from kitt.git_ops.repo_manager import KARRRepoManager
 
     karr_path = KARRRepoManager.find_results_repo(fingerprint)
     if not karr_path:
         karr_path = Path.cwd() / f"karr-{fingerprint[:40]}"
-        console.print(f"[cyan]Creating KARR repository at {karr_path}...[/cyan]")
+        console.print(
+            f"[cyan]Creating git-backed result store at {karr_path}...[/cyan]"
+        )
         KARRRepoManager.create_results_repo(karr_path, fingerprint)
 
     # Read all files from output_dir
@@ -328,7 +330,7 @@ def _store_in_karr(
                 files[rel_path] = file_path.read_text()
 
     KARRRepoManager.store_results(karr_path, model_name, engine_name, timestamp, files)
-    console.print(f"[green]Results stored in KARR: {karr_path}[/green]")
+    console.print(f"[green]Results stored in results storage: {karr_path}[/green]")
 
 
 def _find_suite_config(suite_name: str) -> Path | None:

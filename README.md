@@ -13,7 +13,7 @@ End-to-end testing suite for LLM inference engines. Measures quality consistency
 - **Quality benchmarks** — MMLU, GSM8K, TruthfulQA, and HellaSwag evaluations
 - **Performance benchmarks** — throughput, latency, memory usage, and warmup analysis
 - **Hardware fingerprinting** — automatic system identification for reproducible results
-- **[KARR results storage](https://kirizan.github.io/kitt/concepts/karr/)** — Kitt's AI Results Repository. SQLite (default) or PostgreSQL with queryable schema and full JSON round-tripping
+- **[Results storage](https://kirizan.github.io/kitt/concepts/results-storage/)** — SQLite (default) or PostgreSQL with queryable schema and full JSON round-tripping
 - **Docker deployment stacks** — composable `docker-compose` stacks via `kitt stack`
 - **Devon integration** — embedded [Devon](https://github.com/kirizan/devon) web UI via server-side reverse proxy, with automatic fallback to local Devon
 - **Model format validation** — preflight checks prevent launching containers with incompatible model formats (e.g. safetensors on llama.cpp)

@@ -35,8 +35,8 @@ collection, and result storage.
 :   Automatic GPU, CPU, RAM, storage, and CUDA detection. Results are tagged with
     a compact fingerprint for reproducibility.
 
-**KARR Results Storage**
-:   All benchmark results persisted through KARR (Kitt's AI Results
+**Results Storage**
+:   All benchmark results persisted through results storage (Kitt's AI Results
     Repository). Database-backed by default (SQLite or PostgreSQL) with full
     query, aggregation, and export support.
 
@@ -87,7 +87,7 @@ variables.
 
 ### [Concepts](concepts/index.md)
 
-Architecture overview, hardware fingerprinting, KARR results storage, engine
+Architecture overview, hardware fingerprinting, results storage, engine
 lifecycle, and the benchmark system.
 
 ---

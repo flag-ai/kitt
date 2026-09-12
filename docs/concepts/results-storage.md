@@ -1,8 +1,16 @@
-# KARR — Results Storage
+# Results Storage
 
-KARR (Kitt's AI Results Repository) is KITT's results storage system. Every benchmark run, hardware snapshot, and metric is persisted through KARR, giving you a queryable history of all testing activity.
+!!! note "About the name \"KARR\""
+    KITT's results storage used to be called **KARR** (*Kitt's AI Results Repository*).
+    In the FLAG platform that acronym now belongs to [KARR — Kirizan's AI Refinement
+    Runtime](https://github.com/flag-ai/karr), the control plane that orchestrates
+    BONNIE agents, so the old meaning is retired. Code identifiers keep it for
+    compatibility: `--store-karr`, `--karr`, and the `karr-<fingerprint>/` directory
+    layout of the legacy git-backed store.
 
-KARR has evolved alongside KITT through multiple generations:
+KITT's results storage keeps every benchmark run queryable. Every benchmark run, hardware snapshot, and metric is persisted through results storage, giving you a queryable history of all testing activity.
+
+Results storage has evolved alongside KITT through multiple generations:
 
 | Generation | Backend | Status |
 |------------|---------|--------|
@@ -10,11 +18,11 @@ KARR has evolved alongside KITT through multiple generations:
 | Gen 2 | Git repository with LFS | Legacy, available via `--store-karr` |
 | Gen 3 | Relational database (SQLite / PostgreSQL) | **Current default** |
 
-The underlying storage mechanism has changed, but the purpose has not: KARR is where your results live.
+The underlying storage mechanism has changed, but the purpose has not: results storage is where your results live.
 
 ## Current Backend — Database
 
-The current generation of KARR uses a relational database accessed through the abstract `ResultStore` interface. This makes the backend pluggable while keeping the API consistent.
+The current generation of results storage uses a relational database accessed through the abstract `ResultStore` interface. This makes the backend pluggable while keeping the API consistent.
 
 ```
 ResultStore (abstract interface)
@@ -46,7 +54,7 @@ Key characteristics:
 
 ### PostgreSQL (Production / Distributed)
 
-For multi-agent or web-scale deployments, KARR supports PostgreSQL. Install the extra dependency and provide a DSN connection string:
+For multi-agent or web-scale deployments, results storage supports PostgreSQL. Install the extra dependency and provide a DSN connection string:
 
 ```bash
 poetry install -E postgres        # installs psycopg2
@@ -91,11 +99,11 @@ When you run `kitt run`, JSON result files are still written to the `kitt-result
 ## Git-Backed Storage (Gen 2)
 
 !!! note "Legacy"
-    Git-backed KARR storage is the previous generation. It remains functional
+    The git-backed result store is the previous generation. It remains functional
     and may suit single-machine dev/test workflows, but the database backend
     (Gen 3) is recommended for all new deployments.
 
-The second generation of KARR stored results in a Git repository with LFS tracking. You can still enable it with `--store-karr`.
+The second generation of results storage stored results in a Git repository with LFS tracking. You can still enable it with `--store-karr`.
 
 ### Directory Structure (Gen 2)
 

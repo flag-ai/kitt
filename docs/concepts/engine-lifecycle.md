@@ -78,7 +78,7 @@ It periodically samples GPU memory via pynvml and records:
 - Memory samples over time
 - VRAM utilization percentage
 
-This data is included in the benchmark results and persisted through KARR.
+This data is included in the benchmark results and persisted through results storage.
 
 ### 7. Container Stop and Removal
 

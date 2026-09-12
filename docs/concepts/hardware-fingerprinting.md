@@ -6,7 +6,7 @@ Hardware fingerprinting gives KITT a way to uniquely identify the system it runs
 
 Benchmark results are only meaningful when compared against runs from the same hardware configuration. A throughput measurement on an RTX 4090 cannot be directly compared with one from an A100. Hardware fingerprinting solves this by generating a compact, deterministic string that captures the key hardware characteristics of the system.
 
-This fingerprint is embedded in every result stored by [KARR](karr.md), tagging each run with the exact hardware that produced it.
+This fingerprint is embedded in every result stored by [results storage](results-storage.md), tagging each run with the exact hardware that produced it.
 
 ## Fingerprint Format
 
@@ -28,7 +28,7 @@ The format is designed to be both machine-parseable and readable at a glance. Ea
 
 ### `HardwareFingerprint.generate()`
 
-Returns the compact fingerprint string. This is the primary entry point used by KARR and the CLI to identify hardware.
+Returns the compact fingerprint string. This is the primary entry point used by results storage and the CLI to identify hardware.
 
 ```bash
 kitt fingerprint
@@ -74,11 +74,11 @@ KITT detects the runtime environment and includes it in the system information. 
 
 Environment type detection is ordered from most specific to least specific. DGX systems are checked first, then containerized environments, and finally native OS detection.
 
-## Usage in KARR
+## Usage in results storage
 
-In KARR's current database backend, the full fingerprint is stored in the `hardware.fingerprint` column for every run, enabling queries like "show all results from this machine." The fingerprint is also included in flat-file JSON output.
+In the current database backend, the full fingerprint is stored in the `hardware.fingerprint` column for every run, enabling queries like "show all results from this machine." The fingerprint is also included in flat-file JSON output.
 
-In KARR's legacy Git-backed storage (Gen 2), the fingerprint was truncated to 40 characters for directory naming:
+In the legacy git-backed result store (Gen 2), the fingerprint was truncated to 40 characters for directory naming:
 
 ```
 karr-rtx4090-24gb_i9-13900k-24c_64gb-ddr/
@@ -91,5 +91,5 @@ karr-rtx4090-24gb_i9-13900k-24c_64gb-ddr/
 
 ## Next Steps
 
-- [KARR — Results Storage](karr.md) -- how fingerprints are used in result storage
+- [Results Storage](results-storage.md) -- how fingerprints are used in result storage
 - [Architecture](architecture.md) -- overall system design

@@ -16,9 +16,11 @@ def results():
 
 
 @results.command("init")
-@click.option("--path", "-p", type=click.Path(), help="Path for KARR repo")
+@click.option(
+    "--path", "-p", type=click.Path(), help="Path for the git-backed result store"
+)
 def init_results(path):
-    """Initialize a new KARR results repository."""
+    """Initialize a new git-backed result store (legacy Gen 2 storage)."""
     from kitt.git_ops.repo_manager import KARRRepoManager
     from kitt.hardware.fingerprint import HardwareFingerprint
 
@@ -30,9 +32,9 @@ def init_results(path):
         console.print(f"[yellow]Directory already exists: {repo_path}[/yellow]")
         return
 
-    console.print(f"[cyan]Creating KARR repository at {repo_path}...[/cyan]")
+    console.print(f"[cyan]Creating git-backed result store at {repo_path}...[/cyan]")
     KARRRepoManager.create_results_repo(repo_path, fingerprint)
-    console.print("[green]KARR repository created![/green]")
+    console.print("[green]Git-backed result store created![/green]")
     console.print(f"  Path: {repo_path}")
     console.print(f"  Fingerprint: {fingerprint}")
 
@@ -60,7 +62,7 @@ def submit_results(repo):
 @results.command("list")
 @click.option("--model", help="Filter by model")
 @click.option("--engine", help="Filter by engine")
-@click.option("--karr", type=click.Path(), help="Path to KARR repo")
+@click.option("--karr", type=click.Path(), help="Path to a git-backed result store")
 def list_results(model, engine, karr):
     """List local benchmark results."""
     from rich.table import Table
@@ -82,7 +84,7 @@ def list_results(model, engine, karr):
             table.add_row(*row, "local")
             found += 1
 
-    # Search KARR repos
+    # Search git-backed result stores
     karr_paths = [Path(karr)] if karr else list(Path(".").glob("karr-*"))
     for karr_path in karr_paths:
         if not karr_path.is_dir():
@@ -116,7 +118,9 @@ def list_results(model, engine, karr):
 
     if found == 0:
         console.print("[yellow]No results found in current directory[/yellow]")
-        console.print("Hint: Run benchmarks with 'kitt run' or look in a KARR repo.")
+        console.print(
+            "Hint: Run benchmarks with 'kitt run' or look in a git-backed result store."
+        )
         return
 
     console.print(table)
@@ -184,9 +188,11 @@ def compare_results(run1, run2, additional, fmt):
 
 @results.command("import")
 @click.argument("source", type=click.Path(exists=True))
-@click.option("--karr", type=click.Path(), help="KARR repo to import into")
+@click.option(
+    "--karr", type=click.Path(), help="Git-backed result store to import into"
+)
 def import_results(source, karr):
-    """Import results from a directory into a KARR repo."""
+    """Import results from a directory into a git-backed result store."""
     from kitt.git_ops.repo_manager import KARRRepoManager
     from kitt.hardware.fingerprint import HardwareFingerprint
 
@@ -203,7 +209,7 @@ def import_results(source, karr):
     engine_name = data.get("engine", "unknown")
     timestamp = data.get("timestamp", "unknown")[:19].replace(":", "")
 
-    # Find or create KARR repo
+    # Find or create the git-backed result store
     if karr:
         karr_path = Path(karr)
     else:

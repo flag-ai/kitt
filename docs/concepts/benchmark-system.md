@@ -131,9 +131,9 @@ The `SuiteRunner` in `runners/` orchestrates suite execution:
     - Collect results and GPU memory data.
 3. Aggregate results across runs (mean, stddev, min, max).
 4. Generate reports (JSON, Markdown).
-5. Persist results through [KARR](karr.md).
+5. Persist results through [results storage](results-storage.md).
 
 ## Next Steps
 
 - [Engine Lifecycle](engine-lifecycle.md) -- how engines are started before benchmarks run
-- [KARR — Results Storage](karr.md) -- how benchmark results are stored
+- [Results Storage](results-storage.md) -- how benchmark results are stored
