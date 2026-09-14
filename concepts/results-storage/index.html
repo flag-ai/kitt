@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://kirizan.github.io/kitt/guides/results/">
+        <link rel="canonical" href="https://kirizan.github.io/kitt/concepts/results-storage/">
       
       
-        <link rel="prev" href="../benchmarks/">
+        <link rel="prev" href="../hardware-fingerprinting/">
       
       
-        <link rel="next" href="../campaigns/">
+        <link rel="next" href="../engine-lifecycle/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>Results & Storage - KITT Documentation</title>
+        <title>Results Storage - KITT Documentation</title>
       
     
     
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Results & Storage
+              Results Storage
             
           </span>
         </div>
@@ -266,13 +266,11 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="../" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../../guides/" class="md-tabs__link">
           
   
   
@@ -312,11 +310,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../../concepts/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
           
   
   
@@ -589,8 +589,6 @@
       
   
   
-    
-  
   
   
     
@@ -632,23 +630,20 @@
     
     
       
-        
-        
-      
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../" class="md-nav__link ">
+            <a href="../../guides/" class="md-nav__link ">
               
   
   
@@ -666,13 +661,13 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -692,7 +687,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../engines/" class="md-nav__link">
+      <a href="../../guides/engines/" class="md-nav__link">
         
   
   
@@ -720,7 +715,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../benchmarks/" class="md-nav__link">
+      <a href="../../guides/benchmarks/" class="md-nav__link">
         
   
   
@@ -745,37 +740,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Results & Storage
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../guides/results/" class="md-nav__link">
         
   
   
@@ -791,237 +759,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#database-storage-default" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Database Storage (Default)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Database Storage (Default)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#initialize-the-database" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Initialize the Database
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#import-existing-json-results" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Import Existing JSON Results
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#export-results" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Export Results
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#list-stored-runs" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        List Stored Runs
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#database-statistics" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Database Statistics
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#querying-results" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Querying Results
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Querying Results">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#filter-by-model-engine-or-suite" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Filter by Model, Engine, or Suite
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#aggregation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Aggregation
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#schema-migrations" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Schema Migrations
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#flat-file-output" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Flat File Output
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#comparing-results" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Comparing Results
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Comparing Results">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#cli-comparison" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        CLI Comparison
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#interactive-tui" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Interactive TUI
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#git-backed-storage-legacy" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Git-Backed Storage (Legacy)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Git-Backed Storage (Legacy)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#directory-structure-gen-2" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Directory Structure (Gen 2)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#next-steps" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Next Steps
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1034,7 +771,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../campaigns/" class="md-nav__link">
+      <a href="../../guides/campaigns/" class="md-nav__link">
         
   
   
@@ -1062,7 +799,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../deployment/" class="md-nav__link">
+      <a href="../../guides/deployment/" class="md-nav__link">
         
   
   
@@ -1090,7 +827,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../web-dashboard/" class="md-nav__link">
+      <a href="../../guides/web-dashboard/" class="md-nav__link">
         
   
   
@@ -1118,7 +855,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../monitoring/" class="md-nav__link">
+      <a href="../../guides/monitoring/" class="md-nav__link">
         
   
   
@@ -1146,7 +883,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../agents/" class="md-nav__link">
+      <a href="../../guides/agents/" class="md-nav__link">
         
   
   
@@ -1174,7 +911,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../remote-execution/" class="md-nav__link">
+      <a href="../../guides/remote-execution/" class="md-nav__link">
         
   
   
@@ -1202,7 +939,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../ci-integration/" class="md-nav__link">
+      <a href="../../guides/ci-integration/" class="md-nav__link">
         
   
   
@@ -1230,7 +967,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../plugins/" class="md-nav__link">
+      <a href="../../guides/plugins/" class="md-nav__link">
         
   
   
@@ -1258,7 +995,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../bots/" class="md-nav__link">
+      <a href="../../guides/bots/" class="md-nav__link">
         
   
   
@@ -1286,7 +1023,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../charts/" class="md-nav__link">
+      <a href="../../guides/charts/" class="md-nav__link">
         
   
   
@@ -1314,7 +1051,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../dgx-spark/" class="md-nav__link">
+      <a href="../../guides/dgx-spark/" class="md-nav__link">
         
   
   
@@ -1809,6 +1546,8 @@
       
   
   
+    
+  
   
   
     
@@ -1834,20 +1573,23 @@
     
     
       
+        
+        
+      
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../concepts/" class="md-nav__link ">
+            <a href="../" class="md-nav__link ">
               
   
   
@@ -1865,13 +1607,13 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1891,7 +1633,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../concepts/architecture/" class="md-nav__link">
+      <a href="../architecture/" class="md-nav__link">
         
   
   
@@ -1919,7 +1661,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../concepts/hardware-fingerprinting/" class="md-nav__link">
+      <a href="../hardware-fingerprinting/" class="md-nav__link">
         
   
   
@@ -1944,10 +1686,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../concepts/results-storage/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Results Storage
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1963,6 +1732,148 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#current-backend-database" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Current Backend — Database
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Current Backend — Database">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sqlite-default" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SQLite (Default)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#postgresql-production-distributed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PostgreSQL (Production / Distributed)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hybrid-data-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hybrid Data Model
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#schema-versioning-migrations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Schema Versioning &amp; Migrations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cli-quick-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CLI Quick Reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#flat-file-output-gen-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Flat File Output (Gen 1)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#git-backed-storage-gen-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Git-Backed Storage (Gen 2)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Git-Backed Storage (Gen 2)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#directory-structure-gen-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Directory Structure (Gen 2)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Next Steps
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1975,7 +1886,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../concepts/engine-lifecycle/" class="md-nav__link">
+      <a href="../engine-lifecycle/" class="md-nav__link">
         
   
   
@@ -2003,7 +1914,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../concepts/benchmark-system/" class="md-nav__link">
+      <a href="../benchmark-system/" class="md-nav__link">
         
   
   
@@ -2031,7 +1942,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../concepts/security/" class="md-nav__link">
+      <a href="../security/" class="md-nav__link">
         
   
   
@@ -2113,22 +2024,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#database-storage-default" class="md-nav__link">
+  <a href="#current-backend-database" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Database Storage (Default)
+        Current Backend — Database
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Database Storage (Default)">
+    <nav class="md-nav" aria-label="Current Backend — Database">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#initialize-the-database" class="md-nav__link">
+  <a href="#sqlite-default" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Initialize the Database
+        SQLite (Default)
       
     </span>
   </a>
@@ -2136,43 +2047,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#import-existing-json-results" class="md-nav__link">
+  <a href="#postgresql-production-distributed" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Import Existing JSON Results
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#export-results" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Export Results
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#list-stored-runs" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        List Stored Runs
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#database-statistics" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Database Statistics
+        PostgreSQL (Production / Distributed)
       
     </span>
   </a>
@@ -2185,49 +2063,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#querying-results" class="md-nav__link">
+  <a href="#hybrid-data-model" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Querying Results
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Querying Results">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#filter-by-model-engine-or-suite" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Filter by Model, Engine, or Suite
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#aggregation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Aggregation
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#schema-migrations" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Schema Migrations
+        Hybrid Data Model
       
     </span>
   </a>
@@ -2235,10 +2074,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#flat-file-output" class="md-nav__link">
+  <a href="#schema-versioning-migrations" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Flat File Output
+        Schema Versioning &amp; Migrations
       
     </span>
   </a>
@@ -2246,54 +2085,37 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#comparing-results" class="md-nav__link">
+  <a href="#cli-quick-reference" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Comparing Results
+        CLI Quick Reference
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Comparing Results">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#cli-comparison" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        CLI Comparison
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#interactive-tui" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Interactive TUI
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#git-backed-storage-legacy" class="md-nav__link">
+  <a href="#flat-file-output-gen-1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Git-Backed Storage (Legacy)
+        Flat File Output (Gen 1)
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Git-Backed Storage (Legacy)">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#git-backed-storage-gen-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Git-Backed Storage (Gen 2)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Git-Backed Storage (Gen 2)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -2344,116 +2166,178 @@
 
 
 <h1 id="results-storage">Results Storage<a class="headerlink" href="#results-storage" title="Permanent link">&para;</a></h1>
-<p>Results storage persists all benchmark results. The
-current backend is a relational database (SQLite by default, PostgreSQL for
-production). Flat JSON files are still written for convenience, and the legacy
-Git-backed backend remains available.</p>
-<h2 id="database-storage-default">Database Storage (Default)<a class="headerlink" href="#database-storage-default" title="Permanent link">&para;</a></h2>
-<h3 id="initialize-the-database">Initialize the Database<a class="headerlink" href="#initialize-the-database" title="Permanent link">&para;</a></h3>
-<p>Create tables in the default SQLite database (<code>~/.kitt/kitt.db</code>) or in a
-PostgreSQL instance pointed to by <code>KITT_DB_DSN</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>kitt<span class="w"> </span>storage<span class="w"> </span>init
-</code></pre></div>
-<p>Results are saved to the database automatically after every <code>kitt run</code>. No extra
-flags are needed.</p>
-<h3 id="import-existing-json-results">Import Existing JSON Results<a class="headerlink" href="#import-existing-json-results" title="Permanent link">&para;</a></h3>
-<p>Bring previously exported or flat-file results into results storage:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>kitt<span class="w"> </span>storage<span class="w"> </span>import<span class="w"> </span>./kitt-results/run1/metrics.json
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>kitt<span class="w"> </span>storage<span class="w"> </span>import<span class="w"> </span>./kitt-results/<span class="w">               </span><span class="c1"># imports all runs found</span>
-</code></pre></div>
-<h3 id="export-results">Export Results<a class="headerlink" href="#export-results" title="Permanent link">&para;</a></h3>
-<p>Export runs from results storage back to JSON files:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>kitt<span class="w"> </span>storage<span class="w"> </span><span class="nb">export</span><span class="w"> </span>--output<span class="w"> </span>./export/
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>kitt<span class="w"> </span>storage<span class="w"> </span><span class="nb">export</span><span class="w"> </span>--model<span class="w"> </span>llama<span class="w"> </span>--engine<span class="w"> </span>vllm<span class="w"> </span>--output<span class="w"> </span>./export/
-</code></pre></div>
-<h3 id="list-stored-runs">List Stored Runs<a class="headerlink" href="#list-stored-runs" title="Permanent link">&para;</a></h3>
-<p>Browse what is stored in results storage with optional filters:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>kitt<span class="w"> </span>storage<span class="w"> </span>list
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>kitt<span class="w"> </span>storage<span class="w"> </span>list<span class="w"> </span>--model<span class="w"> </span>llama<span class="w"> </span>--engine<span class="w"> </span>vllm<span class="w"> </span>--limit<span class="w"> </span><span class="m">20</span>
-</code></pre></div>
-<p>Output includes run ID, model, engine, suite, timestamp, and pass/fail counts.</p>
-<h3 id="database-statistics">Database Statistics<a class="headerlink" href="#database-statistics" title="Permanent link">&para;</a></h3>
-<p>Get a high-level summary of results storage contents:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>kitt<span class="w"> </span>storage<span class="w"> </span>stats
-</code></pre></div>
-<p>This shows total runs, unique models, unique engines, date range, and storage
-size.</p>
-<h2 id="querying-results">Querying Results<a class="headerlink" href="#querying-results" title="Permanent link">&para;</a></h2>
-<p>The <code>ResultStore</code> interface supports filtered queries and aggregation from the
-CLI or programmatically.</p>
-<h3 id="filter-by-model-engine-or-suite">Filter by Model, Engine, or Suite<a class="headerlink" href="#filter-by-model-engine-or-suite" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>kitt<span class="w"> </span>storage<span class="w"> </span>list<span class="w"> </span>--model<span class="w"> </span><span class="s2">&quot;Llama-3.1-8B&quot;</span><span class="w"> </span>--engine<span class="w"> </span>vllm
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>kitt<span class="w"> </span>storage<span class="w"> </span>list<span class="w"> </span>--suite<span class="w"> </span>performance<span class="w"> </span>--limit<span class="w"> </span><span class="m">5</span>
-</code></pre></div>
-<h3 id="aggregation">Aggregation<a class="headerlink" href="#aggregation" title="Permanent link">&para;</a></h3>
-<p>Group results by model or engine to compare averages:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>kitt<span class="w"> </span>storage<span class="w"> </span>stats<span class="w"> </span>--group-by<span class="w"> </span>model
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>kitt<span class="w"> </span>storage<span class="w"> </span>stats<span class="w"> </span>--group-by<span class="w"> </span>engine
-</code></pre></div>
-<p>This is useful for spotting regressions across a fleet of models or engines.</p>
-<h2 id="schema-migrations">Schema Migrations<a class="headerlink" href="#schema-migrations" title="Permanent link">&para;</a></h2>
-<p>When upgrading KITT, apply any pending database migrations:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>kitt<span class="w"> </span>storage<span class="w"> </span>migrate
-</code></pre></div>
-<p>The current schema version is <strong>2</strong>. See the
-<a href="../../reference/database/">Database Schema Reference</a> for full table
-documentation.</p>
-<h2 id="flat-file-output">Flat File Output<a class="headerlink" href="#flat-file-output" title="Permanent link">&para;</a></h2>
-<p>Every <code>kitt run</code> writes JSON results to a <code>kitt-results/</code> directory in the
-current working directory, regardless of database settings. These files are
-handy for:</p>
-<ul>
-<li>Quick inspection with <code>jq</code> or a text editor</li>
-<li>Archiving to external storage</li>
-<li>Sharing individual run data without database access</li>
-</ul>
-<p>The flat files mirror the content stored in <code>runs.raw_json</code> in the database.</p>
-<h2 id="comparing-results">Comparing Results<a class="headerlink" href="#comparing-results" title="Permanent link">&para;</a></h2>
-<h3 id="cli-comparison">CLI Comparison<a class="headerlink" href="#cli-comparison" title="Permanent link">&para;</a></h3>
-<p>Compare metrics across two or more benchmark runs:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>kitt<span class="w"> </span>results<span class="w"> </span>compare<span class="w"> </span>./run1<span class="w"> </span>./run2
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>kitt<span class="w"> </span>results<span class="w"> </span>compare<span class="w"> </span>./run1<span class="w"> </span>./run2<span class="w"> </span>--additional<span class="w"> </span>./run3<span class="w"> </span>--format<span class="w"> </span>json
-</code></pre></div>
-<p>The table output shows min, max, average, standard deviation, and coefficient
-of variation for each metric. Paths can point to flat-file result directories
-or exported database runs.</p>
-<h3 id="interactive-tui">Interactive TUI<a class="headerlink" href="#interactive-tui" title="Permanent link">&para;</a></h3>
-<p>Launch a side-by-side terminal comparison (requires the <code>cli_ui</code> extra):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>kitt<span class="w"> </span>compare<span class="w"> </span>./run1<span class="w"> </span>./run2
-</code></pre></div>
-<p>Both <code>kitt results compare</code> and <code>kitt compare</code> work with flat-file directories
-and database-exported results interchangeably.</p>
-<h2 id="git-backed-storage-legacy">Git-Backed Storage (Legacy)<a class="headerlink" href="#git-backed-storage-legacy" title="Permanent link">&para;</a></h2>
 <div class="admonition note">
-<p class="admonition-title">Legacy Backend</p>
-<p>The git-backed result store is the previous generation (Gen 2). It remains
-available via <code>--store-karr</code> for backward compatibility, but the database
-backend is recommended for all new deployments.</p>
+<p class="admonition-title">About the name \"KARR\"</p>
+<p>KITT's results storage used to be called <strong>KARR</strong> (<em>Kitt's AI Results Repository</em>).
+In the FLAG platform that acronym now belongs to <a href="https://github.com/flag-ai/karr">KARR — Kirizan's AI Refinement
+Runtime</a>, the control plane that orchestrates
+BONNIE agents, so the old meaning is retired. Code identifiers keep it for
+compatibility: <code>--store-karr</code>, <code>--karr</code>, and the <code>karr-&lt;fingerprint&gt;/</code> directory
+layout of the legacy git-backed store.</p>
 </div>
-<p>The previous generation of results storage stored results in a Git repository with LFS
-tracking. To use it, add <code>--store-karr</code> to a run:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>kitt<span class="w"> </span>results<span class="w"> </span>init<span class="w"> </span>--path<span class="w"> </span>./my-results
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>kitt<span class="w"> </span>run<span class="w"> </span>-m<span class="w"> </span>/models/llama-7b<span class="w"> </span>-e<span class="w"> </span>vllm<span class="w"> </span>-s<span class="w"> </span>standard<span class="w"> </span>--store-karr<span class="w"> </span>./my-results
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>kitt<span class="w"> </span>results<span class="w"> </span>list<span class="w"> </span>--karr<span class="w"> </span>./my-results
+<p>Every benchmark run, hardware snapshot, and metric KITT produces is persisted through results storage, giving you a queryable history of all testing activity.</p>
+<p>Results storage has evolved alongside KITT through multiple generations:</p>
+<table>
+<thead>
+<tr>
+<th>Generation</th>
+<th>Backend</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Gen 1</td>
+<td>Flat JSON files</td>
+<td>Still written for convenience</td>
+</tr>
+<tr>
+<td>Gen 2</td>
+<td>Git repository with LFS</td>
+<td>Legacy, available via <code>--store-karr</code></td>
+</tr>
+<tr>
+<td>Gen 3</td>
+<td>Relational database (SQLite / PostgreSQL)</td>
+<td><strong>Current default</strong></td>
+</tr>
+</tbody>
+</table>
+<p>The underlying storage mechanism has changed, but the purpose has not: results storage is where your results live.</p>
+<h2 id="current-backend-database">Current Backend — Database<a class="headerlink" href="#current-backend-database" title="Permanent link">&para;</a></h2>
+<p>The current generation of results storage uses a relational database accessed through the abstract <code>ResultStore</code> interface. This makes the backend pluggable while keeping the API consistent.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>ResultStore (abstract interface)
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── SQLiteResultStore   -- default, ~/.kitt/kitt.db
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>└── PostgresResultStore -- optional, requires psycopg2
 </code></pre></div>
+<p>The <code>ResultStore</code> interface exposes a small, consistent API:</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>save_result()</code></td>
+<td>Persist a completed benchmark run</td>
+</tr>
+<tr>
+<td><code>get_result()</code></td>
+<td>Retrieve a single run by ID</td>
+</tr>
+<tr>
+<td><code>query()</code></td>
+<td>Filter runs by model, engine, date range, etc.</td>
+</tr>
+<tr>
+<td><code>list_results()</code></td>
+<td>List runs with optional filters and pagination</td>
+</tr>
+<tr>
+<td><code>aggregate()</code></td>
+<td>Group-by aggregation (e.g., average throughput per engine)</td>
+</tr>
+<tr>
+<td><code>delete_result()</code></td>
+<td>Remove a run and its related rows (CASCADE)</td>
+</tr>
+<tr>
+<td><code>count()</code></td>
+<td>Return the total number of stored runs</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sqlite-default">SQLite (Default)<a class="headerlink" href="#sqlite-default" title="Permanent link">&para;</a></h3>
+<p>SQLite is the default backend. No configuration is required -- KITT creates <code>~/.kitt/kitt.db</code> on first use.</p>
+<p>Key characteristics:</p>
+<ul>
+<li><strong>WAL mode</strong> -- concurrent readers do not block writers, so the web dashboard can query while a benchmark is running.</li>
+<li><strong>Foreign keys with CASCADE DELETE</strong> -- deleting a run automatically removes its benchmarks, metrics, and hardware rows.</li>
+<li><strong>Indexes on common query columns</strong> -- model, engine, suite name, and timestamp are indexed for fast filtering.</li>
+</ul>
+<h3 id="postgresql-production-distributed">PostgreSQL (Production / Distributed)<a class="headerlink" href="#postgresql-production-distributed" title="Permanent link">&para;</a></h3>
+<p>For multi-agent or web-scale deployments, results storage supports PostgreSQL. Install the extra dependency and provide a DSN connection string:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>poetry<span class="w"> </span>install<span class="w"> </span>-E<span class="w"> </span>postgres<span class="w">        </span><span class="c1"># installs psycopg2</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">KITT_DB_DSN</span><span class="o">=</span><span class="s2">&quot;postgresql://user:pass@db-host:5432/kitt&quot;</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>kitt<span class="w"> </span>storage<span class="w"> </span>init<span class="w">                  </span><span class="c1"># creates tables in the target database</span>
+</code></pre></div>
+<p>PostgreSQL uses native types where SQLite uses text approximations -- <code>TIMESTAMPTZ</code> instead of <code>TEXT</code> for timestamps, <code>JSONB</code> instead of <code>TEXT</code> for raw JSON, <code>BOOLEAN</code> instead of <code>INTEGER</code>, and <code>DOUBLE PRECISION</code> instead of <code>REAL</code>.</p>
+<h2 id="hybrid-data-model">Hybrid Data Model<a class="headerlink" href="#hybrid-data-model" title="Permanent link">&para;</a></h2>
+<p>Every run is stored in <strong>two complementary forms</strong>:</p>
+<ol>
+<li><strong>Normalized tables</strong> -- <code>runs</code>, <code>benchmarks</code>, <code>metrics</code>, and <code>hardware</code> break each run into queryable columns with proper types and foreign-key relationships. This powers filtered listing, cross-run comparison, and group-by aggregation.</li>
+<li><strong><code>runs.raw_json</code></strong> -- the full JSON output produced by KITT is stored verbatim in a single column. This guarantees lossless round-tripping: export always returns exactly what was originally recorded, even if the schema evolves.</li>
+</ol>
+<h2 id="schema-versioning-migrations">Schema Versioning &amp; Migrations<a class="headerlink" href="#schema-versioning-migrations" title="Permanent link">&para;</a></h2>
+<p>The database tracks its schema version in the <code>schema_version</code> table. KITT ships with an ordered set of migration scripts and applies any that are newer than the recorded version:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>kitt<span class="w"> </span>storage<span class="w"> </span>migrate<span class="w">              </span><span class="c1"># apply pending migrations</span>
+</code></pre></div>
+<p>The current schema version is <strong>2</strong>. Migrations are forward-only; downgrades are not supported.</p>
+<h2 id="cli-quick-reference">CLI Quick Reference<a class="headerlink" href="#cli-quick-reference" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>kitt storage init</code></td>
+<td>Create tables (SQLite file or PostgreSQL schema)</td>
+</tr>
+<tr>
+<td><code>kitt storage migrate</code></td>
+<td>Apply pending schema migrations</td>
+</tr>
+<tr>
+<td><code>kitt storage import</code></td>
+<td>Import JSON result files into the database</td>
+</tr>
+<tr>
+<td><code>kitt storage export</code></td>
+<td>Export runs from the database as JSON</td>
+</tr>
+<tr>
+<td><code>kitt storage list</code></td>
+<td>List stored runs with optional filters</td>
+</tr>
+<tr>
+<td><code>kitt storage stats</code></td>
+<td>Show summary statistics (run count, models, engines)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="flat-file-output-gen-1">Flat File Output (Gen 1)<a class="headerlink" href="#flat-file-output-gen-1" title="Permanent link">&para;</a></h2>
+<p>When you run <code>kitt run</code>, JSON result files are still written to the <code>kitt-results/</code> directory in the current working directory. These files are useful for quick inspection, piping into <code>jq</code>, or archiving. The database is the primary storage mechanism and source of truth, but flat files remain as a convenience layer.</p>
+<h2 id="git-backed-storage-gen-2">Git-Backed Storage (Gen 2)<a class="headerlink" href="#git-backed-storage-gen-2" title="Permanent link">&para;</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Legacy</p>
+<p>The git-backed result store is the previous generation. It remains functional
+and may suit single-machine dev/test workflows, but the database backend
+(Gen 3) is recommended for all new deployments.</p>
+</div>
+<p>The second generation of results storage stored results in a Git repository with LFS tracking. You can still enable it with <code>--store-karr</code>.</p>
 <h3 id="directory-structure-gen-2">Directory Structure (Gen 2)<a class="headerlink" href="#directory-structure-gen-2" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>karr-&lt;fingerprint&gt;/
-<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>  &lt;model&gt;/
-<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>    &lt;engine&gt;/
-<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>      &lt;timestamp&gt;/
-<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>        metrics.json
-<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>        summary.md
-<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>        hardware.json
-<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>        config.json
-<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>        outputs/          # compressed .jsonl.gz, tracked by Git LFS
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>karr-{fingerprint[:40]}/
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>  {model}/
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    {engine}/
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>      {timestamp}/
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>        metrics.json
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>        summary.md
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>        hardware.json
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>        config.json
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>        outputs/
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>          *.jsonl.gz
 </code></pre></div>
-<p>For Docker-based deployments, Git repos are cumbersome to mount and manage.
-The database backend removes this friction entirely.</p>
+<p>Large output files in <code>outputs/</code> were compressed in 50 MB chunks and tracked by Git LFS. For Docker-based production deployments this approach introduces unnecessary complexity -- mounting Git repos, configuring LFS, and managing repository growth -- that the database backend eliminates entirely.</p>
 <h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="../../concepts/results-storage/">Results Storage</a> -- architecture and design decisions</li>
 <li><a href="../../reference/database/">Database Schema Reference</a> -- full table and column documentation</li>
-<li><a href="../../concepts/hardware-fingerprinting/">Hardware Fingerprinting</a> -- how system identity is captured</li>
+<li><a href="../../guides/results/">Results Guide</a> -- practical workflows for storing, querying, and comparing results</li>
+<li><a href="../hardware-fingerprinting/">Hardware Fingerprinting</a> -- how system identity is captured alongside results</li>
 </ul>
 
 

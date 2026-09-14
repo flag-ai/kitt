@@ -16,7 +16,7 @@
         <link rel="prev" href="../architecture/">
       
       
-        <link rel="next" href="../karr/">
+        <link rel="next" href="../results-storage/">
       
       
         
@@ -1804,10 +1804,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#usage-in-karr" class="md-nav__link">
+  <a href="#usage-in-results-storage" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Usage in KARR
+        Usage in results storage
       
     </span>
   </a>
@@ -1841,7 +1841,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../karr/" class="md-nav__link">
+      <a href="../results-storage/" class="md-nav__link">
         
   
   
@@ -2090,10 +2090,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#usage-in-karr" class="md-nav__link">
+  <a href="#usage-in-results-storage" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Usage in KARR
+        Usage in results storage
       
     </span>
   </a>
@@ -2135,7 +2135,7 @@
 <p>Hardware fingerprinting gives KITT a way to uniquely identify the system it runs on. This identity is used to organize benchmark results so that runs from different machines are never mixed together, and results from the same hardware can be compared over time.</p>
 <h2 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">&para;</a></h2>
 <p>Benchmark results are only meaningful when compared against runs from the same hardware configuration. A throughput measurement on an RTX 4090 cannot be directly compared with one from an A100. Hardware fingerprinting solves this by generating a compact, deterministic string that captures the key hardware characteristics of the system.</p>
-<p>This fingerprint is embedded in every result stored by <a href="../karr/">KARR</a>, tagging each run with the exact hardware that produced it.</p>
+<p>This fingerprint is embedded in every result stored by <a href="../results-storage/">results storage</a>, tagging each run with the exact hardware that produced it.</p>
 <h2 id="fingerprint-format">Fingerprint Format<a class="headerlink" href="#fingerprint-format" title="Permanent link">&para;</a></h2>
 <p>The fingerprint is a human-readable string that encodes GPU, CPU, RAM, storage, CUDA, driver, and OS information:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>{gpu}-{vram}_{cpu}-{cores}_{ram}-{type}_{storage}_{cuda}_{driver}_{os}
@@ -2146,7 +2146,7 @@
 <p>The format is designed to be both machine-parseable and readable at a glance. Each segment is separated by underscores, with dashes used within segments.</p>
 <h2 id="api">API<a class="headerlink" href="#api" title="Permanent link">&para;</a></h2>
 <h3 id="hardwarefingerprintgenerate"><code>HardwareFingerprint.generate()</code><a class="headerlink" href="#hardwarefingerprintgenerate" title="Permanent link">&para;</a></h3>
-<p>Returns the compact fingerprint string. This is the primary entry point used by KARR and the CLI to identify hardware.</p>
+<p>Returns the compact fingerprint string. This is the primary entry point used by results storage and the CLI to identify hardware.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>kitt<span class="w"> </span>fingerprint
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="c1"># rtx4090-24gb_i9-13900k-24c_64gb-ddr5_samsung-990pro-nvme_cuda-12.4_550.90_linux-6.8</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
@@ -2244,9 +2244,9 @@
 </tbody>
 </table>
 <p>Environment type detection is ordered from most specific to least specific. DGX systems are checked first, then containerized environments, and finally native OS detection.</p>
-<h2 id="usage-in-karr">Usage in KARR<a class="headerlink" href="#usage-in-karr" title="Permanent link">&para;</a></h2>
-<p>In KARR's current database backend, the full fingerprint is stored in the <code>hardware.fingerprint</code> column for every run, enabling queries like "show all results from this machine." The fingerprint is also included in flat-file JSON output.</p>
-<p>In KARR's legacy Git-backed storage (Gen 2), the fingerprint was truncated to 40 characters for directory naming:</p>
+<h2 id="usage-in-results-storage">Usage in results storage<a class="headerlink" href="#usage-in-results-storage" title="Permanent link">&para;</a></h2>
+<p>In the current database backend, the full fingerprint is stored in the <code>hardware.fingerprint</code> column for every run, enabling queries like "show all results from this machine." The fingerprint is also included in flat-file JSON output.</p>
+<p>In the legacy git-backed result store (Gen 2), the fingerprint was truncated to 40 characters for directory naming:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>karr-rtx4090-24gb_i9-13900k-24c_64gb-ddr/
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>  └── meta-llama--Llama-3.1-8B/
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>      └── vllm/
@@ -2256,7 +2256,7 @@
 </code></pre></div>
 <h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="../karr/">KARR — Results Storage</a> -- how fingerprints are used in result storage</li>
+<li><a href="../results-storage/">Results Storage</a> -- how fingerprints are used in result storage</li>
 <li><a href="../architecture/">Architecture</a> -- overall system design</li>
 </ul>
 

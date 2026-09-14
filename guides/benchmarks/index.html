@@ -1869,7 +1869,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../concepts/karr/" class="md-nav__link">
+      <a href="../../concepts/results-storage/" class="md-nav__link">
         
   
   
@@ -2328,7 +2328,7 @@ You can also define custom benchmarks in YAML.</p>
 <tr>
 <td><code>--store-karr</code></td>
 <td></td>
-<td>Also store results in KARR's legacy Git-backed backend</td>
+<td>Also store results in the legacy git-backed result store</td>
 </tr>
 </tbody>
 </table>
@@ -2339,7 +2339,7 @@ You can also define custom benchmarks in YAML.</p>
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># Full standard suite with vLLM</span>
 <a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>kitt<span class="w"> </span>run<span class="w"> </span>-m<span class="w"> </span>/models/llama2-7b<span class="w"> </span>-e<span class="w"> </span>vllm<span class="w"> </span>-s<span class="w"> </span>standard<span class="w"> </span>-o<span class="w"> </span>./my-results
 <a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="c1"># Performance suite with legacy Git-backed KARR storage</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="c1"># Performance suite with the legacy git-backed result store</span>
 <a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>kitt<span class="w"> </span>run<span class="w"> </span>-m<span class="w"> </span>/models/mistral-7b<span class="w"> </span>-e<span class="w"> </span>llama_cpp<span class="w"> </span>-s<span class="w"> </span>performance<span class="w"> </span>--store-karr
 <a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>
 <a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="c1"># Override run count</span>

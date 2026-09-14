@@ -1697,7 +1697,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../concepts/karr/" class="md-nav__link">
+      <a href="../../concepts/results-storage/" class="md-nav__link">
         
   
   
@@ -2951,7 +2951,7 @@ state of the CLI.</p>
 </tr>
 <tr>
 <td><code>results</code></td>
-<td>KARR result management, listing, and comparison</td>
+<td>Result management, listing, and comparison</td>
 </tr>
 <tr>
 <td><code>campaign</code></td>
@@ -5016,7 +5016,7 @@ Prometheus, Grafana, and InfluxDB configured for the given scrape targets.</p>
 </tbody>
 </table>
 <h5 id="import">import<a class="headerlink" href="#import" title="Permanent link">&para;</a></h5>
-<p>Import results from a directory into a KARR repo.</p>
+<p>Import results from a directory into a git-backed result store.</p>
 <p><strong>Usage:</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-63-1" name="__codelineno-63-1" href="#__codelineno-63-1"></a>kitt results import [OPTIONS] SOURCE
 </code></pre></div>
@@ -5034,7 +5034,7 @@ Prometheus, Grafana, and InfluxDB configured for the given scrape targets.</p>
 <tr>
 <td><code>--karr</code></td>
 <td>path</td>
-<td>KARR repo to import into</td>
+<td>Git-backed result store to import into</td>
 <td><code>Sentinel.UNSET</code></td>
 </tr>
 <tr>
@@ -5046,7 +5046,7 @@ Prometheus, Grafana, and InfluxDB configured for the given scrape targets.</p>
 </tbody>
 </table>
 <h5 id="init_1">init<a class="headerlink" href="#init_1" title="Permanent link">&para;</a></h5>
-<p>Initialize a new KARR results repository.</p>
+<p>Initialize a new git-backed result store (legacy Gen 2 storage).</p>
 <p><strong>Usage:</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-64-1" name="__codelineno-64-1" href="#__codelineno-64-1"></a>kitt results init [OPTIONS]
 </code></pre></div>
@@ -5064,7 +5064,7 @@ Prometheus, Grafana, and InfluxDB configured for the given scrape targets.</p>
 <tr>
 <td><code>--path</code>, <code>-p</code></td>
 <td>path</td>
-<td>Path for KARR repo</td>
+<td>Path for the git-backed result store</td>
 <td><code>Sentinel.UNSET</code></td>
 </tr>
 <tr>
@@ -5106,7 +5106,7 @@ Prometheus, Grafana, and InfluxDB configured for the given scrape targets.</p>
 <tr>
 <td><code>--karr</code></td>
 <td>path</td>
-<td>Path to KARR repo</td>
+<td>Path to a git-backed result store</td>
 <td><code>Sentinel.UNSET</code></td>
 </tr>
 <tr>
@@ -5208,7 +5208,7 @@ Prometheus, Grafana, and InfluxDB configured for the given scrape targets.</p>
 <tr>
 <td><code>--store-karr</code></td>
 <td>boolean</td>
-<td>Store results in KARR repository</td>
+<td>Also store results in the legacy git-backed result store</td>
 <td><code>False</code></td>
 </tr>
 <tr>

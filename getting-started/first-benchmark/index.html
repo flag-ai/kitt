@@ -660,10 +660,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#7-browse-results-in-karr" class="md-nav__link">
+  <a href="#7-browse-stored-results" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7. Browse Results in KARR
+        7. Browse Stored Results
       
     </span>
   </a>
@@ -1824,7 +1824,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../concepts/karr/" class="md-nav__link">
+      <a href="../../concepts/results-storage/" class="md-nav__link">
         
   
   
@@ -2056,10 +2056,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#7-browse-results-in-karr" class="md-nav__link">
+  <a href="#7-browse-stored-results" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7. Browse Results in KARR
+        7. Browse Stored Results
       
     </span>
   </a>
@@ -2099,7 +2099,7 @@
 
 <h1 id="tutorial-first-benchmark">Tutorial: First Benchmark<a class="headerlink" href="#tutorial-first-benchmark" title="Permanent link">&para;</a></h1>
 <p>This tutorial walks through a complete benchmark run -- from checking your
-hardware to storing results in KARR.</p>
+hardware to storing results in results storage.</p>
 <div class="admonition note">
 <p class="admonition-title">Prerequisites</p>
 <p>KITT must be installed and your GPU must be accessible to Docker. See the
@@ -2177,7 +2177,7 @@ everything works before committing to a full evaluation.</p>
 <li>Wait for the health check to pass</li>
 <li>Execute the throughput benchmark</li>
 <li>Tear down the container</li>
-<li>Write results to <code>kitt-results/</code> and store them in KARR</li>
+<li>Write results to <code>kitt-results/</code> and store them in results storage</li>
 </ol>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -2220,8 +2220,8 @@ safetensors/pytorch; llama.cpp and Ollama require GGUF.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>kitt<span class="w"> </span>results<span class="w"> </span>list<span class="w"> </span>--model<span class="w"> </span>llama-7b<span class="w"> </span>--engine<span class="w"> </span>vllm
 </code></pre></div>
 <hr />
-<h2 id="7-browse-results-in-karr">7. Browse Results in KARR<a class="headerlink" href="#7-browse-results-in-karr" title="Permanent link">&para;</a></h2>
-<p>Results are stored in KARR automatically. Initialize the database if this is
+<h2 id="7-browse-stored-results">7. Browse Stored Results<a class="headerlink" href="#7-browse-stored-results" title="Permanent link">&para;</a></h2>
+<p>Results are stored automatically. Initialize the database if this is
 your first run:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>kitt<span class="w"> </span>storage<span class="w"> </span>init
 </code></pre></div>
@@ -2234,9 +2234,9 @@ your first run:</p>
 </code></pre></div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>KARR uses SQLite by default (<code>~/.kitt/kitt.db</code>) with zero configuration.
+<p>Results storage uses SQLite by default (<code>~/.kitt/kitt.db</code>) with zero configuration.
 For production or multi-agent setups, see the
-<a href="../../concepts/karr/">KARR concepts page</a> for PostgreSQL configuration.</p>
+<a href="../../concepts/results-storage/">results storage concepts page</a> for PostgreSQL configuration.</p>
 </div>
 <hr />
 <h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
