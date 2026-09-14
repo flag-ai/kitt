@@ -1,6 +1,6 @@
 [project]
 name = "kitt-agent"
-version = "1.8.0"
+version = "1.8.1"
 description = "KITT thin agent — receives Docker orchestration commands from a KITT server"
 requires-python = ">=3.10"
 license = {text = "Apache-2.0"}

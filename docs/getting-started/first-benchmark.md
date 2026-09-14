@@ -1,7 +1,7 @@
 # Tutorial: First Benchmark
 
 This tutorial walks through a complete benchmark run -- from checking your
-hardware to storing results in KARR.
+hardware to storing results in results storage.
 
 !!! note "Prerequisites"
     KITT must be installed and your GPU must be accessible to Docker. See the
@@ -98,7 +98,7 @@ KITT will:
 2. Wait for the health check to pass
 3. Execute the throughput benchmark
 4. Tear down the container
-5. Write results to `kitt-results/` and store them in KARR
+5. Write results to `kitt-results/` and store them in results storage
 
 !!! warning
     Make sure the model format matches the engine. vLLM accepts
@@ -131,9 +131,9 @@ kitt results list --model llama-7b --engine vllm
 
 ---
 
-## 7. Browse Results in KARR
+## 7. Browse Stored Results
 
-Results are stored in KARR automatically. Initialize the database if this is
+Results are stored automatically. Initialize the database if this is
 your first run:
 
 ```bash
@@ -154,9 +154,9 @@ kitt storage import ./kitt-results/
 ```
 
 !!! tip
-    KARR uses SQLite by default (`~/.kitt/kitt.db`) with zero configuration.
+    Results storage uses SQLite by default (`~/.kitt/kitt.db`) with zero configuration.
     For production or multi-agent setups, see the
-    [KARR concepts page](../concepts/karr.md) for PostgreSQL configuration.
+    [results storage concepts page](../concepts/results-storage.md) for PostgreSQL configuration.
 
 ---
 

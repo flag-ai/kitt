@@ -11,7 +11,7 @@ KITT exposes **18 command groups** through a single entry point:
 | `run` | Execute benchmarks against an engine |
 | `test` | List benchmarks, create custom tests |
 | `engines` | List, check, and set up inference engines |
-| `results` | KARR result management, listing, and comparison |
+| `results` | Result management, listing, and comparison |
 | `campaign` | Run multi-model, multi-engine campaigns |
 | `monitoring` | Generate and deploy monitoring stacks |
 | `stack` | Generate and manage composable Docker stacks |

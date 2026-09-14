@@ -1,7 +1,7 @@
 # Database Schema Reference
 
-This is the schema reference for [KARR's](../concepts/karr.md) database backend.
-KARR uses a relational database to store benchmark results, agent state, campaign
+This is the schema reference for the [results storage](../concepts/results-storage.md) database backend.
+Results storage uses a relational database to store benchmark results, agent state, campaign
 progress, and event logs. The schema is versioned and managed through an
 automatic migration system.
 

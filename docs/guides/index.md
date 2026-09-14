@@ -13,7 +13,7 @@ If you are new to KITT, start with the
 
 - **[Engines](engines.md)** -- Set up, inspect, and configure inference engines.
 - **[Benchmarks](benchmarks.md)** -- Run test suites, create custom benchmarks, and interpret results.
-- **[Results & KARR](results.md)** -- Store, compare, import, and export benchmark results through KARR.
+- **[Results Storage](results.md)** -- Store, compare, import, and export benchmark results.
 - **[Campaigns](campaigns.md)** -- Automate multi-model, multi-engine benchmark runs with campaign configs.
 
 ## Deployment & Infrastructure

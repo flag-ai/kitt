@@ -2,6 +2,11 @@
 
 All notable changes to KITT are documented on this page.
 
+## 1.8.1
+
+- Retired the "KARR (Kitt's AI Results Repository)" name for KITT's results storage. In the FLAG platform, KARR is Kirizan's AI Refinement Runtime (the control plane for BONNIE agents), so docs and CLI help now say "results storage" and "git-backed result store" instead. The concepts page moved from `concepts/karr.md` to `concepts/results-storage.md`.
+- No behaviour change: `--store-karr`, `--karr`, `KARRRepoManager`, and the `karr-<fingerprint>/` layout are unchanged
+
 ## 1.8.0
 
 - **Rolled back to the Python implementation** — `main` now carries the Python tree again after the Go rewrite (2.0.0–2.9.1) was retired
